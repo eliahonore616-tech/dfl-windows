@@ -1,6 +1,6 @@
 /* Copie la police Montserrat et les modules de lecture/export (Excel, Word, PDF) dans www/ */
 const fs = require('fs'), path = require('path');
-const root = path.join(__dirname, '..'), nm = path.join(root, 'node_modules'), www = path.join(root, 'www');
+const root = path.join(__dirname, '..'), nm = path.join(root, 'node_modules'), www = root;
 const jobs = [
   ['@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2', 'fonts/montserrat-latin-wght-normal.woff2'],
   ['@fontsource-variable/montserrat/files/montserrat-latin-ext-wght-normal.woff2', 'fonts/montserrat-latin-ext-wght-normal.woff2'],

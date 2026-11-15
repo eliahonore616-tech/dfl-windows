@@ -7,14 +7,32 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
-    "prepare-assets": "node scripts/prepare.js",
-    "dist": "npm run prepare-assets && electron-builder --win nsis --x64 --publish never"
+    "prepare-assets": "node prepare.js",
+    "dist": "npm run prepare-assets && electron-builder --win nsis --x64 --ia32 --publish never"
   },
   "build": {
     "appId": "cd.dfl.gestionagents",
     "productName": "DFL Gestion des agents",
-    "files": ["main.js", "preload.js", "www/**/*", "build/icon.png"],
-    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.png" },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "icon.png",
+      "fonts/**/*",
+      "lib/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "icon.png"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": false,
@@ -27,8 +45,8 @@
     "artifactName": "DFL-Setup-${version}.${ext}"
   },
   "devDependencies": {
-    "electron": "^33.2.0",
-    "electron-builder": "^25.1.8",
+    "electron": "22.3.27",
+    "electron-builder": "^24.13.3",
     "@fontsource-variable/montserrat": "^5.1.0",
     "xlsx": "0.18.5",
     "mammoth": "^1.8.0",
