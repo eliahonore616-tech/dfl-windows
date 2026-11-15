@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0A3C98">
+<title>Gestion des agents – Direction de Suivi des Finances Locales</title>
+<style>
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/montserrat-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/montserrat-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+:root{
+  --font:'Montserrat',system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --sky:#6FB1FF;
+  --alice:#EEF4FF;
+  --steel:#1565D8;
+  --deep:#0A3C98;
+
+  --navy:#0A3C98;--bg:#EEF4FF;--card:#FFFFFF;--line:#C9D8F2;--ink:#0B1B3A;--muted:#4B628A;
+  --blue:#1565D8;--btn:#1565D8;--soft:#E1ECFF;--yellow:#F6C500;--red:#CE1126;--green:#14865A;
+  --gsoft:#E2F5EC;--rsoft:#FCE9EB;--asoft:#FFF2C7;--aink:#6B4E00;
+  --hero-grad:linear-gradient(165deg,#0A3C98 0%,#0B5ED7 100%);
+  --shadow:0 1px 3px rgba(10,60,152,.08),0 6px 18px rgba(10,60,152,.07);
+}
+@media (prefers-color-scheme:dark){
+  :root{--navy:#08193A;--bg:#050F22;--card:#0A1B38;--line:#17335F;--ink:#EAF1FF;--muted:#93AEDB;--blue:#6FA8FF;--btn:#1565D8;
+  --soft:#0F2749;--green:#44C48C;--gsoft:#0E2F25;--rsoft:#3A1519;--asoft:#3A3000;--aink:#FFE08A;--shadow:none}
+}
+*{box-sizing:border-box}
+:root{--xl:#a9b8cf;--xlh:#dbe7f7}
+@media (prefers-color-scheme:dark){:root{--xl:#2f4f7d;--xlh:#16345f}}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+h2{font-size:24px}h3{font-size:17px}
+p{margin:0}
+a{color:var(--blue)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.muted{color:var(--muted)}
+.sub{color:var(--muted);font-size:14px;margin-top:4px}
+
+/* ---------- Structure ---------- */
+.top{position:sticky;top:0;z-index:25;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;
+  padding-top:max(10px,env(safe-area-inset-top));background:var(--navy);color:#fff}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+.brand svg{width:36px;height:36px;flex:none}
+.brand span{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-size:16px;font-weight:800}
+.brand small{font-size:11.5px;opacity:.85;font-weight:500}
+.side{display:none}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(6,1fr);background:var(--card);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 16px rgba(0,91,150,.08)}
+.bnav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:60px;padding:0 2px;color:var(--muted);text-decoration:none;font-size:10px;font-weight:600;text-align:center;line-height:1.15}
+.bnav a[aria-current="page"]{color:var(--blue)}
+.bnav a[aria-current="page"]{box-shadow:inset 0 3px 0 var(--sky)}
+.ava{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--sky);color:var(--deep);font-weight:800;flex:none}
+.top .ava{width:32px;height:32px;text-decoration:none;font-size:14px}
+main{padding:16px 14px 104px;max-width:1120px;margin:0 auto}
+@media (min-width:900px){
+  .top,.bnav{display:none}
+  .side{display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;width:272px;padding:22px 14px;background:var(--navy);color:#fff;overflow:auto}
+  .side .brand{padding:0 8px 18px;border-bottom:1px solid rgba(255,255,255,.16);margin-bottom:10px}
+  .side nav{display:flex;flex-direction:column;gap:2px}
+  .side nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:#E1F1FA;text-decoration:none;font-weight:600;font-size:14px}
+  .side nav a:hover{background:rgba(135,206,235,.16);color:#fff}
+  .side nav a[aria-current="page"]{background:var(--steel);color:#fff;box-shadow:inset 3px 0 0 var(--sky)}
+  .side .gl{margin:16px 12px 4px;font-size:12px;font-weight:600;color:var(--sky)}
+  .side .who{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,.16)}
+  .side .who div{display:flex;flex-direction:column;line-height:1.2;min-width:0;flex:1}
+  .side .who small{opacity:.8;font-size:12px}
+  .side .who b{overflow:hidden;text-overflow:ellipsis}
+  .side .ib{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:38px;height:38px;display:grid;place-items:center}
+  main{margin-left:272px;max-width:none;padding:30px 34px 56px}
+  main>*{max-width:1080px}
+}
+
+/* ---------- Composants ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.ph{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);text-decoration:none;color:var(--ink);font-weight:600;font-size:14px}
+.btn svg{width:18px;height:18px}
+.btn.primary{background:var(--btn);border-color:var(--btn);color:#fff}
+.btn.primary:hover{background:var(--deep);border-color:var(--deep)}
+.btn.danger{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.btn.sm{min-height:36px;padding:0 13px;font-size:13px;border-radius:8px}
+.btn:hover{filter:brightness(.97)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+label{display:block;font-size:13px;color:var(--muted);font-weight:600}
+input,select,textarea{width:100%;min-height:46px;margin-top:5px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:16px;color:var(--ink)}
+input:focus,select:focus,textarea:focus{border-color:var(--steel)}
+input[type=file]{padding:9px}
+input[type=radio],input[type=checkbox]{width:20px;height:20px;min-height:0;margin:0;accent-color:var(--btn)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.radios{display:flex;gap:10px;flex-wrap:wrap;margin-top:5px}
+label.rd{display:flex;align-items:center;gap:8px;min-height:46px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-weight:500;cursor:pointer}
+.empty{padding:34px 16px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:14px;background:var(--card)}
+.warn{display:flex;gap:10px;align-items:flex-start;background:var(--asoft);color:var(--aink);padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:14px}
+.warn a{color:inherit;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--soft);color:var(--deep);white-space:nowrap}
+.badge.ok{background:var(--gsoft);color:var(--green)}.badge.warn{background:var(--asoft);color:var(--aink)}.badge.bad{background:var(--rsoft);color:var(--red)}
+.narrow{max-width:430px;margin:20px auto}
+.narrow form{display:grid;gap:14px;margin-top:16px}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:100;max-width:92vw;padding:13px 18px;border-radius:10px;background:var(--deep);color:#fff;
+  font-size:14px;font-weight:500;box-shadow:0 8px 28px rgba(0,91,150,.35);display:none}
+#toast.err{background:var(--red)}
+@media (min-width:900px){#toast{bottom:28px}}
+.seg{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto;margin-bottom:14px}
+.seg a{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;padding:10px 14px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:700;font-size:13px}
+.seg a svg{width:17px;height:17px}
+.seg a[aria-current="page"]{background:var(--btn);color:#fff}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.tools input,.tools select{margin-top:0}
+.tools .wide{grid-column:1/-1}
+@media (min-width:700px){.tools .wide{grid-column:span 2}}
+.printhead{display:none;text-align:center;margin-bottom:14px}
+
+/* ---------- Design & Pied de page ---------- */
+.lockhead{display:flex;justify-content:center;margin-bottom:12px}
+.lockhead .lk{display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--soft);color:var(--deep)}
+.narrow .btn{width:100%;border-radius:999px}
+fieldset.fsec{border:1px solid var(--line);border-radius:14px;padding:20px;margin:0 0 14px;background:var(--card);box-shadow:var(--shadow);min-width:0}
+fieldset.fsec legend{display:flex;align-items:center;gap:10px;padding:0 8px;font-weight:700;font-size:15px}
+fieldset.fsec legend i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--btn);color:#fff;font-style:normal;font-size:13px}
+
+/* ---------- Accueil ---------- */
+.hero{position:relative;overflow:hidden;text-align:center;border-radius:20px;color:#fff;padding:34px 24px 104px;background:var(--hero-grad);margin-bottom:16px;box-shadow:var(--shadow)}
+.hero::before{content:"";position:absolute;left:50%;top:-20px;width:300px;height:300px;margin-left:-150px;opacity:.16;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon fill='%23ffffff' points='50,5 61,38 96,38 68,58 79,92 50,71 21,92 32,58 4,38 39,38'/%3E%3C/svg%3E") center/contain no-repeat}
+.hero .band{position:absolute;left:-12%;right:-12%;bottom:-34px;height:86px;transform:rotate(-5deg);background:linear-gradient(var(--yellow) 0 12%,var(--red) 12% 88%,var(--yellow) 88% 100%)}
+.hero>*:not(.band){position:relative}
+.pill{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,255,255,.18);font-size:12px;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(22px,4.8vw,35px);font-weight:800;max-width:21em;margin:0 auto}
+.hero .hdir{margin:12px auto 0;font-size:17px;font-weight:700;color:var(--yellow)}
+.hero .msg{color:#fff;opacity:.92;margin:14px auto 0;font-size:15px;max-width:34em}
+.hero .cta{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.hero .btn{background:#fff;color:var(--deep);border-color:#fff;border-radius:999px;padding:0 24px;font-weight:700}
+@media (min-width:760px){.hero{padding:48px 38px 78px}.hero .band{width:46%;left:auto;right:-60px;bottom:-20px;height:76px;transform:rotate(-24deg)}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{display:flex;gap:12px;align-items:center;padding:14px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.stat .ic{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--soft);color:var(--deep);flex:none}
+.stat .ic.y{background:var(--asoft);color:var(--aink)}.stat .ic.g{background:var(--gsoft);color:var(--green)}.stat .ic.r{background:var(--rsoft);color:var(--red)}
+.stat b{display:block;font-size:24px;font-weight:800;line-height:1.1}
+.stat span{font-size:12.5px;color:var(--muted);font-weight:500}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.tile{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.tile:hover{border-color:var(--steel)}
+.tile .ic{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--soft);color:var(--deep);flex:none}
+.tile b{display:block;font-size:15px}.tile span{color:var(--muted);font-size:13px}
+.note{margin-top:18px;color:var(--muted);font-size:13px}
+
+/* ---------- Agents ---------- */
+#list{display:grid;gap:8px}
+.arow{display:grid;grid-template-columns:50px 1fr auto;gap:12px;align-items:center;text-align:left;width:100%;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.arow:hover{border-color:var(--steel)}
+.an{display:flex;flex-direction:column;min-width:0}
+.an b{overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.an small{color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis}
+.am{color:var(--muted);font-size:12px;font-weight:600;text-align:right}
+.av{width:50px;height:50px;border-radius:50%;overflow:hidden;background:var(--soft);display:grid;place-items:center;font-weight:800;color:var(--deep);border:2px solid var(--card);box-shadow:0 0 0 1.5px var(--line)}
+.av img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- Fiche / modale ---------- */
+.mb{position:fixed;inset:0;z-index:60;background:rgba(0,40,75,.6);display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--card);width:100%;max-width:660px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px}
+@media (min-width:700px){.mb{align-items:center;padding:20px}.modal{border-radius:18px}}
+.fiche-top{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.fiche-top .av{width:92px;height:92px;border-radius:14px;font-size:28px}
+.fiche-top h3{font-size:20px}
+.fiche-top .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+dl.f{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:16px 0}
+dl.f dt{font-size:12px;color:var(--muted);font-weight:600}dl.f dd{margin:0;font-weight:600;word-break:break-word;font-size:14px}
+.placed{display:grid;gap:6px;margin:6px 0 14px}
+.placed a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:13.5px}
+.placed a svg{width:20px;height:20px;color:var(--deep);flex:none}
+.placed a b{display:block}
+.okhead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.okhead .ic{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--gsoft);color:var(--green)}
+
+/* ---------- Formulaire ---------- */
+.fsec{margin-bottom:14px}
+.fsec h3{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:15px}
+.fsec h3 i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--btn);color:#fff;font-style:normal;font-size:13px}
+.photo-box{display:flex;gap:14px;align-items:center}
+.photo-box .av{width:88px;height:88px;border-radius:14px;flex:none;font-size:26px}
+.formbar{position:sticky;bottom:70px;display:flex;gap:10px;padding:12px 0}
+@media (min-width:900px){.formbar{bottom:0}}
+
+/* ---------- Tableaux ---------- */
+.tw{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--shadow);max-height:72vh}
+table.tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+.tbl th{position:sticky;top:0;z-index:2;background:var(--navy);color:#fff;text-align:left;padding:11px 12px;font-weight:700;white-space:nowrap;font-size:12.5px}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl tbody tr{cursor:pointer}.tbl tbody tr:hover td{background:var(--soft)}
+.tbl .s1,.tbl .s2{position:sticky;background:var(--card);z-index:1}
+.tbl th.s1,.tbl th.s2{background:var(--navy);z-index:3}
+.tbl .s1{left:0;min-width:46px}.tbl .s2{left:46px;min-width:210px;font-weight:700}
+.tbl tfoot td{font-weight:800;background:var(--soft);border-bottom:0}
+.tbl td.c,.tbl th.c{text-align:center}
+.tbl input.num{width:76px;min-height:38px;margin:0;text-align:center;padding:4px}
+
+/* ---------- Tableaux façon Excel ---------- */
+.xlwrap{overflow:auto;border:1px solid var(--xl);background:var(--card);max-height:72vh;margin-bottom:16px}
+table.xl{border-collapse:collapse;width:100%;font-size:13px}
+.tbl.xl th,.tbl.xl td{border:1px solid var(--xl);padding:6px 9px;white-space:nowrap}
+.tbl.xl th{background:var(--xlh);color:var(--ink);text-align:center;font-weight:700;position:sticky;top:0;z-index:2}
+.tbl.xl th.s1,.tbl.xl th.s2{background:var(--xlh);z-index:4}
+.tbl.xl thead th.t{position:static;background:var(--card);font-size:15px;font-weight:800;white-space:normal;padding:7px 8px;line-height:1.35;border-top:0;border-bottom:0}
+.tbl.xl thead th.t.sm{font-size:12.5px;font-weight:700;padding:3px 8px}
+.tbl.xl thead th.t.last{border-bottom:1px solid var(--xl);padding-bottom:12px}
+.tbl.xl thead th.t.lft{text-align:left}
+.tbl.xl input{margin:0;min-height:32px;padding:3px 8px;font-size:13px;min-width:190px;border-radius:6px}
+.stk{position:sticky;left:0;width:min(900px,calc(100vw - 48px));text-align:center}
+.tbl.xl.wrap .stk{width:auto}
+.tbl.xl.wrap td,.tbl.xl.wrap th{white-space:normal}
+.tbl.xl.wrap input{min-width:0;width:100%}
+.tbl.xl tbody.ag td{padding:4px 8px;font-size:12.5px}
+.tbl.xl tr.bh td{background:var(--soft);font-weight:700;text-align:left}
+.tbl.xl tfoot td{background:var(--xlh);font-weight:800}
+.tbl.xl td.l,.tbl.xl th.l{text-align:left}
+.tbl.xl tr.grp td{background:var(--soft);font-weight:700}
+.tbl.xl td.s1,.tbl.xl td.s2{background:var(--card)}
+.tbl.xl tbody tr:hover td{background:var(--soft)}
+/* ---------- Mise en place / cadre ---------- */
+.dv{margin-bottom:12px}
+.dv>header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.dv>header small{color:var(--muted);font-size:12.5px;display:block}
+.dv .cnt{text-align:right}.dv .cnt b{font-size:22px;font-weight:800;display:block;line-height:1.1}
+.alist{display:grid;gap:6px}
+.alist .arow{border-radius:10px;padding:8px 10px;box-shadow:none}
+.alist .av{width:42px;height:42px;font-size:13px}
+.alist .arow{grid-template-columns:42px 1fr auto}
+.meter{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:2px 0 12px}
+.meter i{display:block;height:100%;border-radius:99px;background:var(--green)}
+.linkbtn{background:none;border:0;padding:0;color:var(--deep);font-weight:800;text-decoration:underline;font-size:13px}
+.addpost{display:flex;gap:8px;margin-top:12px}.addpost input{margin-top:0}
+
+/* ---------- Administration / Base de données ---------- */
+.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.list li{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.list em{color:var(--muted);font-style:normal;font-size:13px;margin-left:6px}
+.dir{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+.dh{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin-bottom:8px}
+.chips{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chips li{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.chips .chip{border:0;background:none;padding:6px 12px;font-size:13px}
+.chips .x{border:0;border-left:1px solid var(--line);background:none;padding:0 11px;color:var(--red);font-size:18px}
+.inline{display:flex;gap:8px}.inline input{margin-top:0}.inline .btn{flex:none}
+.sec2{margin-top:14px}
+.drop{display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px 16px;border:2px dashed var(--line);border-radius:14px;text-align:center;cursor:pointer;color:var(--muted)}
+.drop svg{width:34px;height:34px;color:var(--steel)}
+.drop b{color:var(--ink)}
+details.map{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
+details.map summary{cursor:pointer;font-weight:700;font-size:13.5px}
+details.map .grid{margin-top:12px}
+.kv{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.db-box{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--soft);margin-bottom:12px}
+.db-box .ic{display:grid;place-items:center;width:44px;height:44px;border-radius:10px;background:var(--deep);color:#fff;flex:none}
+
+@media print{
+  @page{size:A4 landscape;margin:12mm}
+  .top,.bnav,.side,#toast,.noprint,.tools,.seg{display:none!important}
+  main{margin:0;padding:0;max-width:none}
+  body{background:#fff;color:#000}
+  .printhead{display:block}
+  .card,.tw{box-shadow:none;max-height:none;overflow:visible}
+  .tbl th{background:#e6ebf3!important;color:#000!important}
+  .tbl .s1,.tbl .s2{position:static}
+  body.printing #app,body.printing #toast{display:none!important}
+  body.printing .mb{position:static;background:none;display:block;padding:0}
+  body.printing .modal{box-shadow:none;max-height:none;max-width:none;padding:0;border-radius:0;background:#fff;color:#000}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+/*PURE-START*/
+/* ================= Utilitaires et logique pure ================= */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const hash = s => {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57; const str = 'dfl|' + s;
+  for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+};
+const sha256 = async s => {
+  try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('dfl-v2|' + s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { return hash('v2|' + s); }
+};
+const SEX = { M: 'Masculin', F: 'Féminin' };
+const ETATS = ['Célibataire', 'Fiancé(e)', 'Marié(e)', 'Divorcé(e)', 'Veuf/Veuve'];
+const PRISE = ['Suivi', 'Financé', 'Suivi et financé', 'Aucune'];
+const SITU = ['Actif', 'Détaché', 'Suspendu', 'Retraité', 'Décédé'];
+const DIRNAME = 'Direction de Suivi des Finances Locales';
+const ROLES = { admin: 'Adm1 — Directeur (DR)', cd: 'Adm2 — Chef de division (CD)', cb: 'Adm3 — Secrétaire et Chef de bureau (Sec et CB)' };
+const GRADES = [
+  { c: '120', l: 'Directeur-Chef de Service', a: 'DIR', p: 1 }, { c: '130', l: 'Chef de Division', a: 'CD', p: 4 }, { c: '140', l: 'Chef de Bureau', a: 'CB', p: 10 },
+  { c: '210', l: 'Attaché d’Administration de 1ère Classe', a: 'ATA1', p: 14 }, { c: '220', l: 'Attaché d’Administration de 2ème Classe', a: 'ATA2', p: 890 },
+  { c: '310', l: 'Agent d’Administration de 1ère Classe', a: 'AGA1', p: 215 }, { c: '320', l: 'Agent d’Administration de 2ème Classe', a: 'AGA2', p: 25 },
+  { c: '', l: 'Agent Auxiliaire de 1ère Classe', a: '', p: 0 }, { c: '', l: 'Agent Auxiliaire de 2ème Classe', a: '', p: 0 }, { c: '', l: 'Huissier', a: 'HUISSIER', p: 2 }
+];
+const FONCTIONS = ['DIR', 'CD', 'CB', 'ATA1', 'ATA2', 'AGA1', 'AGA2', 'HUISSIER'];
+const canonGrade = g => {
+  let s = String(g ?? '').trim(); if (!s) return '';
+  const m = s.match(/\((\d{3})\)/), n = norm(m ? m[1] : s);
+  const f = GRADES.find(x => (x.c && x.c === n) || norm(x.l) === n || (x.a && norm(x.a) === n) || (n === 'directeur' && x.c === '120'));
+  return f ? f.l : s;
+};
+const gradeCode = g => { const f = GRADES.find(x => x.l === canonGrade(g)); return f ? (f.c || f.l) : String(g || ''); };
+const DIPLOMES = ['Diplôme d’État (D6)', 'Graduat', 'Licence', 'Master', 'Doctorat', 'Brevet'];
+const gradeRank = g => { const c = canonGrade(g); const i = GRADES.findIndex(x => x.l === c); return i < 0 ? 50 : i; };
+const isMat = m => !!m && !/^n\.?\s?u\.?$/i.test(String(m).trim());
+const fullName = a => `${(a.nom || '').toUpperCase()} ${(a.postnom || '').toUpperCase()} ${a.prenom || ''}`.replace(/\s+/g, ' ').trim();
+
+const isoOK = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '');
+const fmtDate = iso => isoOK(iso) ? iso.split('-').reverse().join('/') : '';
+const age = iso => {
+  if (!isoOK(iso)) return null;
+  const d = new Date(iso), n = new Date(); let a = n.getFullYear() - d.getFullYear();
+  if (n.getMonth() < d.getMonth() || (n.getMonth() === d.getMonth() && n.getDate() < d.getDate())) a--;
+  return a >= 0 && a < 120 ? a : null;
+};
+const toISO = s => {
+  s = String(s ?? '').trim(); let m;
+  if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  if ((m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/))) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  return '';
+};
+const dateFrom = v => {
+  if (v == null || v === '') return '';
+  const n = typeof v === 'number' ? v : (/^\d{5}$/.test(String(v).trim()) ? +v : NaN);
+  if (!isNaN(n) && n > 2000 && n < 80000) return new Date(Math.round((n - 25569) * 864e5)).toISOString().slice(0, 10);
+  return toISO(v);
+};
+const normEtat = s => {
+  const n = norm(s); if (!n) return '';
+  if (n.startsWith('celib')) return 'Célibataire'; if (n.startsWith('fianc')) return 'Fiancé(e)';
+  if (n.startsWith('mari')) return 'Marié(e)'; if (n.startsWith('divorc')) return 'Divorcé(e)'; if (n.startsWith('veu')) return 'Veuf/Veuve';
+  return String(s).trim();
+};
+
+/* ---- Lecture des fichiers : reconnaissance des colonnes ---- */
+const FIELDS = [['noms', 'Noms complets (nom + postnom + prénom)'], ['nom', 'Nom'], ['postnom', 'Postnom'], ['prenom', 'Prénom'], ['sexe', 'Sexe'],
+  ['naissance', 'Date de naissance'], ['etat_civil', 'État civil'], ['diplome', 'Diplôme'], ['matricule', 'Matricule'], ['acte', 'N° acte d’engagement'],
+  ['engagement', 'Date d’engagement'], ['grade', 'Grade'], ['fonction', 'Fonction'], ['direction', 'Direction'], ['division', 'Division'], ['bureau', 'Bureau'],
+  ['salaire', 'Salaire (oui/non)'], ['salaire_montant', 'Montant du salaire'], ['prime', 'Prime (oui/non)'], ['prime_montant', 'Montant de la prime'], ['recense', 'Recensé (oui/non)'], ['prise_en_charge', 'Prise en charge'], ['situation', 'Situation'], ['observation', 'Observation']];
+const CFIELDS = [['direction', 'Direction'], ['division', 'Division'], ['grade', 'Grade / poste'], ['prevu', 'Effectif prévu'], ['note', 'Remarque']];
+const AKEYS = FIELDS.map(f => f[0]), CKEYS = CFIELDS.map(f => f[0]);
+const ALIAS = {
+  noms: ['noms', 'nomcomplet', 'nomscomplets', 'nomsetpostnoms', 'nometpostnom', 'nomsetpostnom', 'nomspostnomsetprenoms', 'nomsetprenoms', 'nomprenom', 'nometprenom', 'nomsdesagents', 'nomsagents', 'agent', 'identite', 'nomsprenomsetpostnoms', 'nompostnomprenom', 'nompostnometprenom', 'nomdelagent', 'nomsdelagent', 'nomspostnoms', 'nomspostnom'],
+  nom: ['nom'], postnom: ['postnom'], prenom: ['prenom'],
+  naissance: ['datedenaissance', 'datenaissance', 'naissance', 'datenaiss', 'nele'],
+  sexe: ['sexe', 'genre', 'sx'],
+  etat_civil: ['etatcivil', 'ec', 'situationmatrimoniale', 'etatmatrimonial'],
+  diplome: ['diplome', 'niveaudetudes', 'niveauetude', 'niveaudetude', 'qualification'],
+  matricule: ['matricule', 'matricul', 'matr', 'nmatricule', 'matriculeagent', 'numeromatricule', 'nomatricule'],
+  acte: ['nactedengagement', 'acteengagement', 'actedengagement', 'acte', 'nacte', 'numeroacte', 'referenceacte'],
+  engagement: ['datedengagement', 'dateengagement', 'engagement', 'datedentreeenservice', 'dateentree', 'datedeprisedeservice', 'datedeprise', 'datedenomination'],
+  grade: ['grade', 'gradeactuel', 'structure'], fonction: ['fonction', 'poste', 'emploi', 'fonctionexercee'],
+  direction: ['direction'], division: ['division', 'divisiondaffectation'], bureau: ['bureau', 'bureaux', 'cellule', 'section'],
+  salaire: ['salaire', 'paie'], salaire_montant: ['montant', 'montantsalaire'], prime: ['prime'], prime_montant: ['montant2', 'montantprime'], recense: ['recenser', 'recense', 'recensement'], observation: ['observation', 'observations', 'remarque', 'remarques'], prise_en_charge: ['priseencharge'],
+  situation: ['situation', 'statut', 'situationadministrative'],
+  prevu: ['effectif', 'effectifprevu', 'effectifsprevus', 'prevu', 'prevus', 'postesprevus', 'effectifcadre', 'effectifs', 'nombredepostes', 'nbpostes', 'cadre'],
+  note: ['remarque', 'remarques', 'observation', 'observations', 'note']
+};
+function bestField(h, keys) {
+  let best = null;
+  for (const k of keys) for (const a of ALIAS[k]) {
+    let s = 0; if (h === a) s = 1000 + a.length; else if (a.length >= 6 && h.includes(a)) s = a.length;
+    if (s && (!best || s > best.s)) best = { k, s };
+  }
+  return best;
+}
+function autoMap(row, keys) {
+  const m = {};
+  row.forEach((c, ci) => { const h = norm(c); if (!h) return; const b = bestField(h, keys); if (b && (!m[b.k] || b.s > m[b.k].s)) m[b.k] = { ci, s: b.s }; });
+  const o = {}; for (const k in m) o[k] = m[k].ci; return o;
+}
+function pickTable(aoa, keys) {
+  let best = null; const cadre = keys === CKEYS;
+  for (let i = 0; i < Math.min(aoa.length, 30); i++) {
+    const m = autoMap(aoa[i] || [], keys), n = Object.keys(m).length;
+    const ok = cadre ? (n >= 2 && 'prevu' in m && ('grade' in m || 'division' in m)) : (n >= 2 && ('nom' in m || 'noms' in m));
+    if (ok && (!best || n > best.n)) best = { hi: i, map: m, n };
+  }
+  return best;
+}
+const looksLikeHeader = (r, keys) => Object.keys(autoMap(r, keys)).length >= 3;
+const isTotalRow = r => /^(sous[- ]?)?total/i.test(String(r.find(c => String(c ?? '').trim() !== '') ?? '').trim());
+function rowToAgent(r, map, opt, sheet) {
+  const g = k => map[k] != null ? String(r[map[k]] ?? '').replace(/\s+/g, ' ').trim() : '';
+  let nom = g('nom'), postnom = g('postnom'), prenom = g('prenom');
+  if (!nom && map.noms != null) { const t = g('noms').split(' ').filter(Boolean); nom = t[0] || ''; postnom = t[1] || postnom; prenom = t.slice(2).join(' ') || prenom; }
+  if (!nom) return null;
+  const sx = g('sexe').toLowerCase();
+  const yn = v => { v = String(v).trim().toLowerCase(); return !v ? '' : ['oui', 'o', 'yes', 'y', '1', 'x', 'true', 'vrai'].includes(v) ? 'Oui' : 'Non'; };
+  return {
+    nom, postnom, prenom, naissance: dateFrom(map.naissance != null ? r[map.naissance] : ''), sexe: sx.startsWith('f') ? 'F' : sx.startsWith('m') ? 'M' : '',
+    etat_civil: normEtat(g('etat_civil')), diplome: g('diplome'), matricule: g('matricule'), acte: g('acte'),
+    engagement: dateFrom(map.engagement != null ? r[map.engagement] : ''), grade: (() => { let gr = canonGrade(g('grade')); if (!GRADES.some(x => x.l === gr)) { const f = canonGrade(g('fonction')); if (GRADES.some(x => x.l === f)) gr = f; } return gr; })(), fonction: g('fonction'),
+    direction: g('direction') || opt.dir || '', division: g('division') || (opt.sheetAsDiv ? sheet : ''), bureau: g('bureau'),
+    salaire: yn(g('salaire')), salaire_montant: g('salaire_montant'), prime: yn(g('prime')), prime_montant: g('prime_montant'), recense: yn(g('recense')), prise_en_charge: g('prise_en_charge'), situation: g('situation'), observation: g('observation')
+  };
+}
+function rowToPost(r, map, opt, sheet) {
+  const g = k => map[k] != null ? String(r[map[k]] ?? '').replace(/\s+/g, ' ').trim() : '';
+  const grade = canonGrade(g('grade') || g('note')); if (!grade) return null;
+  const prevu = parseInt(g('prevu').replace(/[^\d]/g, ''), 10); if (isNaN(prevu)) return null;
+  return { direction: g('direction') || opt.dir || '', division: g('division') || (opt.sheetAsDiv ? sheet : ''), grade, prevu, note: g('grade') ? g('note') : '' };
+}
+function parseCSV(t) {
+  t = t.replace(/^\uFEFF/, '');
+  const first = t.split(/\r?\n/)[0] || '', cnt = c => first.split(c).length;
+  const d = cnt(';') >= cnt(',') && cnt(';') >= cnt('\t') ? ';' : cnt('\t') > cnt(',') ? '\t' : ',';
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === d) { row.push(f); f = ''; }
+    else if (c === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+    else if (c !== '\r') f += c;
+  }
+  if (f !== '' || row.length) { row.push(f); rows.push(row); }
+  return rows.filter(r => r.some(x => String(x).trim() !== ''));
+}
+const csvCell = v => { v = String(v ?? ''); return /[;"\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+const matchDivision = (name, list) => { const n = norm(name); return list.find(x => norm(x) === n) || name; };
+const agentKey = a => isMat(a.matricule) ? 'm:' + norm(a.matricule) : 'n:' + norm(a.nom + a.postnom + a.prenom + (a.naissance || ''));
+
+/* ---- Calculs utilisés par les onglets (dépendent de la base) ---- */
+let DB = null;
+function divOrder(d) {
+  const set = [...d.divisions], add = x => { if (x && !set.includes(x)) set.push(x); };
+  DB.agents.filter(a => a.direction === d.name).forEach(a => add(a.division));
+  DB.cadre.filter(c => c.direction === d.name).forEach(c => add(c.division));
+  return set;
+}
+function sortAgents(list, mode) {
+  const di = a => DB.directions.findIndex(d => d.name === a.direction);
+  const vi = a => { const d = DB.directions[di(a)]; if (!d) return 999; const i = divOrder(d).indexOf(a.division || ''); return i < 0 ? 998 : i; };
+  const nm = a => (a.nom + ' ' + a.postnom + ' ' + a.prenom);
+  const c = {
+    hier: (a, b) => di(a) - di(b) || vi(a) - vi(b) || gradeRank(a.grade) - gradeRank(b.grade) || nm(a).localeCompare(nm(b), 'fr'),
+    alpha: (a, b) => nm(a).localeCompare(nm(b), 'fr'),
+    mat: (a, b) => String(a.matricule || '~').localeCompare(String(b.matricule || '~'), 'fr', { numeric: true })
+  }[mode || 'hier'];
+  return [...list].sort(c);
+}
+function cadreRows(dirName) {
+  const rows = new Map();
+  DB.cadre.filter(c => c.direction === dirName && !c.division).forEach(c => { const g = canonGrade(c.grade); rows.set(norm(g), { grade: g, prevu: c.prevu, enplace: 0, id: c.id }); });
+  DB.agents.filter(a => a.direction === dirName).forEach(a => {
+    const g = canonGrade(a.grade) || 'Grade non renseigné', k = norm(g);
+    if (!rows.has(k)) rows.set(k, { grade: g, prevu: 0, enplace: 0, id: null });
+    rows.get(k).enplace++;
+  });
+  return [...rows.values()].sort((a, b) => gradeRank(a.grade) - gradeRank(b.grade) || a.grade.localeCompare(b.grade, 'fr'));
+}
+function unitRows() {
+  const org = DB.org, out = [], inDiv = (a, n) => a.division === n;
+  org.divisions.forEach((div, i) => {
+    if (div.kind === 'sec') { out.push({ type: 'sec', i, name: div.name, resp: div.cd, prevu: div.prevu || 0, enplace: DB.agents.filter(a => inDiv(a, div.name)).length }); return; }
+    out.push({ type: 'div', i, name: div.name, resp: div.cd, enplace: DB.agents.filter(a => inDiv(a, div.name) && !a.bureau).length });
+    div.bureaux.forEach((b, j) => out.push({ type: 'bur', i, j, name: b.name, resp: b.cb, prevu: b.prevu || 0, enplace: DB.agents.filter(a => inDiv(a, div.name) && a.bureau === b.name).length }));
+  });
+  const known = new Set(org.divisions.map(v => v.name)), un = DB.agents.filter(a => !known.has(a.division)).length;
+  if (un) out.push({ type: 'none', name: 'Sans affectation', resp: '', prevu: 0, enplace: un });
+  return out;
+}
+const incomplete = a => !a.matricule || !a.acte || !a.naissance || !a.grade || !a.fonction || !a.diplome || !a.engagement;
+const group = (list, fn, order) => {
+  const m = {}; list.forEach(a => { const k = fn(a) || 'Non renseigné'; m[k] = (m[k] || 0) + 1; });
+  const e = Object.entries(m);
+  if (order) e.sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])); else e.sort((a, b) => b[1] - a[1]);
+  return e;
+};
+const defaultOrg = () => ({
+  directeur: 'KIVUNDE KITAMBO Jean de Dieu',
+  divisions: [
+    { id: 'd1', name: 'Appui à la fiscalité provinciale', cd: 'KAMAYI NKASHAMA Jacques', bureaux: [
+      { id: 'd1b1', name: 'Appui à la fiscalité provinciale Pool-Est', cb: 'KAFUNDA KAFUNDA Delphin', prevu: 131 },
+      { id: 'd1b2', name: 'Appui à la fiscalité provinciale Pool-Ouest', cb: 'YONDO MPIA LUANGE Jean Pierre', prevu: 139 }] },
+    { id: 'd2', name: 'Appui à la fiscalité locale', cd: 'MWAMBA BONSO Jacques', bureaux: [
+      { id: 'd2b1', name: 'Appui à la fiscalité locale (ETD) Pool-Est', cb: 'LINGOYA KUNDAKEFE Sylvie', prevu: 134 },
+      { id: 'd2b2', name: 'Appui à la fiscalité locale (ETD) Pool-Ouest', cb: 'SAFU NSAMBA Nanou', prevu: 0 }] },
+    { id: 'd3', name: 'Vérification des actes financiers des provinces', cd: 'MANSONI MAYIKOTI Marie France', bureaux: [
+      { id: 'd3b1', name: 'Examen de conformité des édits financiers et budgétaires des provinces', cb: 'BWANDALA BATUBU Racheté', prevu: 135 },
+      { id: 'd3b2', name: 'Examen de conformité des décisions financières et budgétaires des ETD', cb: 'ESAMBO NDOWO Paul', prevu: 129 }] },
+    { id: 'd4', name: 'Statistiques des finances publiques provinciales et des ETD', cd: 'MAVUNGU MABIALA Flavien', bureaux: [
+      { id: 'd4b1', name: 'Statistiques des finances publiques provinciales', cb: 'MAKUALA KETO Becky', prevu: 151 },
+      { id: 'd4b2', name: 'Statistiques des finances publiques des ETD', cb: 'KOYI KIZI', prevu: 149 }] },
+    secDefault()
+  ]
+});
+function secDefault() { return { id: 'sec', kind: 'sec', name: 'Secrétariat de Direction', cd: 'MBUFULI BOKHUAN Patrick Richard', prevu: 24, bureaux: [] }; }
+const migrate = d => {
+  d.users = d.users || []; d.directions = d.directions || []; d.agents = d.agents || [];
+  d.cadre = d.cadre || []; d.meta = d.meta || {}; if (!d.meta.annee) d.meta.annee = new Date().getFullYear();
+  if (!d.directions.length) d.directions.push({ name: DIRNAME, divisions: [] });
+  d.agents.forEach(a => {
+    if (!a.direction) a.direction = d.directions[0].name;
+    if (a.bureau == null) a.bureau = '';
+  });
+  const generic = o => o && Array.isArray(o.divisions) && !o.directeur && o.divisions.every(v => /^Division \d$/.test(v.name || '') && !v.cd && (v.bureaux || []).every(b => !b.cb));
+  if (!d.org || !Array.isArray(d.org.divisions) || generic(d.org)) {
+    const old = (d.org && d.org.divisions) || [], neo = defaultOrg();
+    old.forEach((ov, i) => { const nv = neo.divisions[i]; if (!nv || nv.kind) return;
+      d.agents.forEach(a => { if (a.division === ov.name) { a.division = nv.name; const j = (ov.bureaux || []).findIndex(b => b.name === a.bureau); if (j >= 0 && nv.bureaux[j]) a.bureau = nv.bureaux[j].name; } }); });
+    d.org = neo;
+  } else {
+    d.org.directeur = d.org.directeur || '';
+    d.org.divisions.forEach((div, i) => {
+      div.id = div.id || ('d' + (i + 1)); div.name = div.name || ('Division ' + (i + 1)); div.cd = div.cd || ''; div.prevu = +div.prevu || 0;
+      if (!Array.isArray(div.bureaux)) div.bureaux = [];
+      div.bureaux.forEach((b, j) => { b.id = b.id || (div.id + 'b' + (j + 1)); b.name = b.name || ('Bureau ' + (j + 1)); b.cb = b.cb || ''; b.prevu = +b.prevu || 0; });
+    });
+    if (!d.org.divisions.some(v => v.kind === 'sec')) d.org.divisions.push(secDefault());
+  }
+  const main0 = d.directions[0];
+  if (!d.meta.cadreInit) {
+    GRADES.forEach(g => { if (!d.cadre.some(c => c.direction === main0.name && !c.division && canonGrade(c.grade) === g.l)) d.cadre.push({ id: uid(), direction: main0.name, division: '', grade: g.l, prevu: g.p, note: '' }); });
+    d.meta.cadreInit = true;
+  }
+  d.agents.forEach(a => { if (a.grade) a.grade = canonGrade(a.grade); });
+  d.users.forEach(u => { if (u.role === 'directeur') u.role = 'admin'; else if (u.role === 'saisie') u.role = 'cb'; });
+  [['cd', 'Adm2'], ['cb', 'Adm3']].forEach(([r, n]) => { if (!d.users.some(u => u.role === r) && !d.users.some(u => u.username.toLowerCase() === n.toLowerCase())) d.users.push({ id: uid(), username: n, pass: hash(n.toLowerCase()), role: r, mustChange: true }); });
+  const main = d.directions[0];
+  if (main) main.divisions = d.org.divisions.map(x => x.name);
+  d.version = 3; return d;
+};
+/*PURE-END*/
+
+/* ================= Environnement ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const isNative = () => !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform());
+const FS = () => window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Filesystem;
+let toastTimer;
+const toast = (msg, err) => {
+  const t = $('#toast'); t.textContent = msg; t.className = err ? 'err' : ''; t.style.display = 'block';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.style.display = 'none', 4200);
+};
+const LIBS = { xlsx: ['lib/xlsx.full.min.js', 'XLSX'], mammoth: ['lib/mammoth.browser.min.js', 'mammoth'], pdf: ['lib/pdf.min.js', 'pdfjsLib'] };
+const loadLib = name => new Promise((res, rej) => {
+  const [src, g] = LIBS[name]; if (window[g]) return res();
+  const s = document.createElement('script'); s.src = src; s.onload = () => window[g] ? res() : rej(new Error('lib')); s.onerror = () => rej(new Error('lib'));
+  document.head.appendChild(s);
+});
+async function saveFile(name, data, type, isB64) {
+  if (isNative()) {
+    try {
+      const P = Capacitor.Plugins, b64 = isB64 ? data : btoa(unescape(encodeURIComponent(data)));
+      const r = await P.Filesystem.writeFile({ path: name, data: b64, directory: 'CACHE' });
+      await P.Share.share({ title: name, url: r.uri, dialogTitle: 'Enregistrer ou envoyer vers le cloud' });
+    } catch (e) { if (!/cancel/i.test(String((e && e.message) || ''))) toast('Impossible de partager le fichier', true); }
+    return;
+  }
+  const blob = isB64 ? new Blob([Uint8Array.from(atob(data), c => c.charCodeAt(0))], { type }) : new Blob([data], { type });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+}
+async function exportTable(base, header, rows) {
+  try {
+    await loadLib('xlsx');
+    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+    ws['!cols'] = header.map((h, i) => ({ wch: Math.min(40, Math.max(String(h).length, ...rows.slice(0, 200).map(r => String(r[i] ?? '').length)) + 2) }));
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Feuille1');
+    await saveFile(base + '.xlsx', XLSX.write(wb, { bookType: 'xlsx', type: 'base64' }), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', true);
+  } catch (e) {
+    await saveFile(base + '.csv', '\uFEFF' + [header, ...rows].map(r => r.map(csvCell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+  }
+}
+const today = () => new Date().toISOString().slice(0, 10);
+
+/* ================= Stockage : fichier dans l'application ================= */
+const DBFILE = 'base_agents.json', AUXFILE = 'base_agents.auto.json';
+const Store = {
+  kind: 'mem', db: null, mem: null, timer: null, busy: false,
+  async open() {
+    if (window.dflDesktop) { this.kind = 'desktop'; return; }
+    if (isNative() && FS()) {
+      try {
+        await FS().writeFile({ path: 'dfl/.test', data: 'ok', directory: 'DATA', encoding: 'utf8', recursive: true });
+        const r = await FS().readFile({ path: 'dfl/.test', directory: 'DATA', encoding: 'utf8' });
+        if (r.data === 'ok') { this.kind = 'native'; try { await FS().deleteFile({ path: 'dfl/.test', directory: 'DATA' }); } catch (e) {} return; }
+      } catch (e) { toast('Stockage fichier indisponible : utilisation de la mémoire interne de l’application', true); }
+    }
+    await new Promise(res => {
+      try { const r = indexedDB.open('dfl_agents', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => { this.db = r.result; this.kind = 'idb'; res(); }; r.onerror = () => res(); }
+      catch (e) { res(); }
+    });
+  },
+  async readRaw(name) {
+    try {
+      if (this.kind === 'desktop') return await window.dflDesktop.read(name);
+      if (this.kind === 'native') return (await FS().readFile({ path: 'dfl/' + name, directory: 'DATA', encoding: 'utf8' })).data;
+    } catch (e) {}
+    return null;
+  },
+  async writeRaw(name, txt) {
+    if (this.kind === 'desktop') return window.dflDesktop.write(name, txt);
+    if (this.kind === 'native') return FS().writeFile({ path: 'dfl/' + name, data: txt, directory: 'DATA', encoding: 'utf8', recursive: true });
+  },
+  async get() {
+    if (this.kind === 'idb') {
+      return new Promise(res => { try { const q = this.db.transaction('kv').objectStore('kv').get('data'); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); } catch (e) { res(null); } });
+    }
+    if (this.kind === 'mem') return this.mem;
+    for (const n of [DBFILE, AUXFILE]) {
+      const t = await this.readRaw(n);
+      if (t) { try { const d = JSON.parse(t); if (d && Array.isArray(d.agents)) { if (n === AUXFILE) toast('Base principale illisible : copie automatique restaurée'); return d; } } catch (e) {} }
+    }
+    try {
+      const old = await new Promise(res => { const r = indexedDB.open('dfl_agents', 1); r.onupgradeneeded = () => { r.result.createObjectStore('kv'); }; r.onsuccess = () => { try { const q = r.result.transaction('kv').objectStore('kv').get('data'); q.onsuccess = () => res(q.result || null); q.onerror = () => res(null); } catch (e) { res(null); } }; r.onerror = () => res(null); });
+      if (old && Array.isArray(old.agents) && old.agents.length) return old;
+    } catch (e) {}
+    return null;
+  },
+  set(v) { this.mem = v; clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 350); },
+  async flush() {
+    clearTimeout(this.timer);
+    if (this.busy) { this.timer = setTimeout(() => this.flush(), 300); return; }
+    this.busy = true;
+    try {
+      if (this.kind === 'idb') this.db.transaction('kv', 'readwrite').objectStore('kv').put(this.mem, 'data');
+      else if (this.kind !== 'mem') await this.writeRaw(DBFILE, JSON.stringify(this.mem));
+    } catch (e) { toast('Erreur d’enregistrement de la base de données', true); }
+    this.busy = false;
+  },
+  where() {
+    if (this.kind === 'desktop') return window.dflDesktop.where();
+    if (this.kind === 'native') return Promise.resolve('Stockage interne de l’application (dossier dfl, fichier ' + DBFILE + ')');
+    return Promise.resolve(this.kind === 'idb' ? 'Stockage interne local de l’appareil (IndexedDB sécurisé)' : 'Mémoire temporaire');
+  }
+};
+const save = () => Store.set(DB);
+
+const APP_VERSION = '2.7.1';
+let session = null, nextRoute = '', formPhoto = '', afterRoute = null, imp = null;
+const ui = { dir: '', q: '', div: '', sit: '', sort: 'hier' };
+const seed = () => migrate({
+  users: [
+    { id: uid(), username: 'Adm1', pass: hash('adm1'), role: 'admin', mustChange: true },
+    { id: uid(), username: 'Adm2', pass: hash('adm2'), role: 'cd', mustChange: true },
+    { id: uid(), username: 'Adm3', pass: hash('adm3'), role: 'cb', mustChange: true }
+  ],
+  directions: [{ name: DIRNAME, divisions: [] }],
+  agents: [], cadre: [], org: defaultOrg(), meta: { lastBackup: 0 }
+});
+
+/* ================= Icônes ================= */
+const IC = {
+  home: '<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.3c2.2.7 3.5 2.6 3.5 5.7"/>',
+  plus: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>', plusb: '<path d="M12 5v14M5 12h14"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  org: '<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="2" y="16" width="6" height="5" rx="1"/><rect x="16" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  more: '<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>',
+  download: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+  logout: '<path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',
+  check: '<path d="M5 12l5 5 9-10"/>', key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>',
+  alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>', file: '<path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5"/>',
+  db: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+  cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+  harddrive: '<line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/>'
+};
+const ico = (n, s = 22) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+const MARK = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1565D8"/><polygon points="0,21 21,0 32,0 0,32" fill="#F7D618"/><polygon points="0,25 25,0 29,0 0,29" fill="#CE1021"/><path d="M8 6l1.2 3.4 3.6.1-2.9 2.1 1.1 3.5L8 13l-3 2.1 1.1-3.5L3.2 9.5l3.6-.1z" fill="#F7D618"/></svg>';
+const initials = a => (((a.nom || '?')[0] || '?') + ((a.postnom || '')[0] || '')).toUpperCase();
+const avatar = a => `<span class="av">${a.photo ? `<img src="${a.photo}" alt="">` : esc(initials(a))}</span>`;
+
+/* ================= Navigation (6 sections) ================= */
+const NAV = [
+  { r: 'accueil', l: 'Accueil', s: 'Accueil', i: 'home' },
+  { r: 'nouveau', l: 'Formulaire', s: 'Formulaire', i: 'plus' },
+  { r: 'liste', l: 'Liste déclarative', s: 'Liste', i: 'list' },
+  { r: 'mise-en-place', l: 'Mise en place', s: 'Mise en place', i: 'layers' },
+  { r: 'cadre', l: 'Cadre organique', s: 'Cadre', i: 'org' },
+  { r: 'admin', l: 'Administration', s: 'Admin', i: 'shield' }
+];
+const PROTECTED = ['nouveau', 'mise-en-place', 'cadre', 'liste', 'importer', 'admin', 'base-de-donnees', 'compte'];
+const DOCS = ['mise-en-place', 'cadre', 'liste'];
+const DOCTITLE = { 'mise-en-place': 'Mise en place du personnel', cadre: 'Cadre organique', liste: 'Liste déclarative des agents' };
+
+function shell(inner, name) {
+  const isAdmin = session && session.role === 'admin';
+  const side = NAV.map(n => `<a href="#/${n.r}" ${n.r === name ? 'aria-current="page"' : ''}>${ico(n.i, 20)}<span>${n.l}</span></a>`).join('');
+  const who = session
+    ? `<div class="who"><span class="ava">${esc(session.username[0].toUpperCase())}</span><div><b>${esc(session.username)}</b><small>${ROLES[session.role] || session.role}</small></div><button class="ib" data-act="logout" aria-label="Se déconnecter">${ico('logout', 18)}</button></div>`
+    : '<div class="who"><a class="btn sm primary" href="#/login">Se connecter</a></div>';
+  const bn = `<nav class="bnav" aria-label="Navigation">${NAV.map(n => `<a href="#/${n.r}" ${n.r === name ? 'aria-current="page"' : ''}>${ico(n.i, 22)}<small>${n.s}</small></a>`).join('')}</nav>`;
+  const banners = [];
+  if (session && session.mustChange) banners.push(`<div class="warn">${ico('alert', 20)}<span>Le mot de passe par défaut est encore actif. <a href="#/compte">Le changer maintenant</a></span></div>`);
+  if (isAdmin && DB.agents.length && (!DB.meta.lastBackup || Date.now() - DB.meta.lastBackup > 30 * 864e5))
+    banners.push(`<div class="warn">${ico('alert', 20)}<span>Aucune sauvegarde depuis plus de 30 jours. <a href="#/base-de-donnees">Sauvegarder la base de données</a></span></div>`);
+  return `<header class="top"><a class="brand" href="#/accueil">${MARK}<span><b>DFL</b><small>Gestion des agents</small></span></a>${session ? `<a class="ava" href="#/compte" aria-label="Mon compte">${esc(session.username[0].toUpperCase())}</a>` : '<a class="btn sm" href="#/login" style="min-height:34px">Connexion</a>'}</header>
+  <aside class="side"><a class="brand" href="#/accueil">${MARK}<span><b>DFL</b><small>Gestion des agents</small></span></a><nav aria-label="Navigation principale">${side}</nav>${who}</aside>
+  <main>${banners.join('')}${inner}</main>${bn}`;
+}
+
+/* ================= Pages ================= */
+const stat = (ic, cls, n, l) => `<div class="stat"><span class="ic ${cls}">${ico(ic, 22)}</span><div><b>${n}</b><span>${l}</span></div></div>`;
+function pAccueil() {
+  return `<section class="hero"><span class="band"></span>
+    <span class="pill">République Démocratique du Congo</span>
+    <h1>Bienvenue à la Direction de Suivi des Finances Locales</h1>
+    <p class="hdir">Ministère de l’Intérieur, Sécurité, Décentralisation et Affaires Coutumières</p>
+    <p class="msg">Enregistrez les agents, consultez la liste déclarative, la mise en place du personnel et le cadre organique.</p>
+    <div class="cta">${session ? '<a class="btn" href="#/nouveau">Commencer l’enregistrement</a>' : '<a class="btn" href="#/login">Se connecter</a>'}</div></section>`;
+}
+function pLogin() {
+  const first = DB.users.some(u => u.mustChange);
+  return `<section class="card narrow"><div class="lockhead"><span class="lk">${ico('key', 26)}</span></div>
+    <h2 style="text-align:center">Accès Administrateur</h2><p class="sub" style="text-align:center">Accès réservé au personnel autorisé.</p>
+    <form data-f="login"><label>Identifiant<input name="u" autocomplete="username" autocapitalize="none" required></label>
+    <label>Mot de passe<input name="p" type="password" autocomplete="current-password" required></label>
+    <button class="btn primary">Se connecter</button></form>
+    ${first ? `<p class="sub" style="margin-top:14px">Premier accès : le mot de passe initial est l’identifiant écrit en minuscules (${DB.users.filter(u => u.mustChange).map(u => '<b>' + esc(u.username) + '</b>').join(', ')}). Vous devrez le changer ensuite.</p>` : ''}
+    <p class="sub" style="text-align:center;margin-top:16px;font-size:12px">Gestion des agents — Direction de Suivi des Finances Locales · version ${APP_VERSION}</p></section>`;
+}
+function pCompte() {
+  return `<section class="card narrow"><h2>Mon mot de passe</h2><p class="sub">Connecté en tant que <b>${esc(session.username)}</b></p>
+    <form data-f="pw"><label>Mot de passe actuel<input name="old" type="password" autocomplete="current-password" required></label>
+    <label>Nouveau mot de passe (6 caractères minimum)<input name="n1" type="password" autocomplete="new-password" minlength="6" required></label>
+    <label>Confirmer le nouveau mot de passe<input name="n2" type="password" autocomplete="new-password" minlength="6" required></label>
+    <button class="btn primary">Enregistrer le mot de passe</button></form></section>`;
+}
+
+/* ---------- 7e Page : Base de données (Stockage interne, Cloud & Lieu sûr) ---------- */
+function pBaseDeDonnees() {
+  const sizeKB = Math.max(1, Math.round(JSON.stringify(DB).length / 1024));
+  const lastManual = DB.meta.lastBackup ? new Date(DB.meta.lastBackup).toLocaleString('fr-FR') : 'Aucune sauvegarde effectuée';
+  const lastAuto = DB.meta.lastAuto || 'Aujourd’hui';
+  return `<header class="ph"><div><h2>Base de données & Sauvegardes</h2><p class="sub">Stockage interne de l’appareil, sauvegarde en ligne (Cloud) et conservation en lieu sûr.</p></div></header>
+
+  <div class="stats">
+    ${stat('users', '', DB.agents.length, 'agents enregistrés')}
+    ${stat('db', 'g', sizeKB + ' Ko', 'taille de la base')}
+    ${stat('shield', 'y', lastAuto, 'copie auto interne')}
+  </div>
+
+  <!-- 1. Stockage interne -->
+  <section class="card">
+    <div class="db-box">
+      <span class="ic">${ico('harddrive', 22)}</span>
+      <div>
+        <h3>1. Stockage interne de l’application</h3>
+        <p class="sub" style="margin-top:4px">Emplacement actif : <b id="whereDb">Vérification du stockage…</b></p>
+        <p class="sub" style="margin-top:4px">Toutes les saisies sont enregistrées automatiquement hors ligne sur cet appareil.</p>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn primary" data-act="flushdb">${ico('check', 18)}Forcer l’enregistrement interne</button>
+      ${window.dflDesktop ? '<button class="btn" data-act="openfolder">Ouvrir le dossier local</button>' : ''}
+    </div>
+  </section>
+
+  <!-- 2. Sauvegarde en ligne / Cloud -->
+  <section class="card sec2">
+    <div class="db-box">
+      <span class="ic">${ico('cloud', 22)}</span>
+      <div>
+        <h3>2. Sauvegarde en ligne / Sur un Cloud</h3>
+        <p class="sub" style="margin-top:4px">Envoyez une copie de la base vers <b>Google Drive, OneDrive, iCloud, Dropbox ou par e-mail</b> pour éviter toute perte en cas de panne ou de vol de l’appareil.</p>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn primary" data-act="cloudbackup">${ico('cloud', 18)}Envoyer / Enregistrer sur le Cloud (.json)</button>
+      <button class="btn" data-act="copyjson">${ico('file', 18)}Copier la base (Presse-papiers)</button>
+      ${session.role === 'admin' ? `<label class="btn">${ico('upload', 18)}<input type="file" id="impJson" accept=".json,application/json" hidden>Restaurer depuis le Cloud / un fichier</label>` : ''}
+    </div>
+  </section>
+
+  <!-- 3. Lieu sûr (Conservation physique / Externe) -->
+  <section class="card sec2">
+    <div class="db-box">
+      <span class="ic">${ico('shield', 22)}</span>
+      <div>
+        <h3>3. Conservation en lieu sûr (Archive sécurisée)</h3>
+        <p class="sub" style="margin-top:4px">Dernière sauvegarde manuelle : <b>${esc(lastManual)}</b>.</p>
+        <p class="sub" style="margin-top:4px">Téléchargez une archive complète datée à conserver sur une <b>clé USB dédiée, un disque dur externe ou dans le coffre administratif</b>.</p>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn primary" data-act="backup">${ico('download', 18)}Télécharger l’archive en lieu sûr (.json)</button>
+      <button class="btn" data-act="exportall">${ico('file', 18)}Exporter le registre complet (Excel)</button>
+    </div>
+  </section>`;
+}
+
+/* ---------- Agents ---------- */
+const allDivisions = dir => DB.directions.filter(d => !dir || d.name === dir).flatMap(d => divOrder(d));
+const agentRow = a => `<button class="arow" data-act="fiche" data-id="${a.id}">${avatar(a)}<span class="an"><b>${esc(fullName(a))}</b><small>${esc(a.grade || 'Grade non renseigné')}${a.fonction ? ' — ' + esc(a.fonction) : ''}</small></span><span class="am">${esc(a.matricule || '')}${a.bureau ? `<br><span class="badge">${esc(a.bureau)}</span>` : a.division ? `<br><span class="badge">${esc(a.division)}</span>` : ''}</span></button>`;
+
+/* ---------- Fenêtres ---------- */
+function openModal(html) {
+  closeModal();
+  const m = document.createElement('div'); m.className = 'mb'; m.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  m.addEventListener('click', e => { if (e.target === m) closeModal(); });
+  document.body.appendChild(m);
+}
+function closeModal() { $$('.mb').forEach(m => m.remove()); document.body.classList.remove('printing'); }
+function ask(msg, def = '', type = 'text') {
+  return new Promise(res => {
+    const m = document.createElement('div'); m.className = 'mb'; m.style.zIndex = 90;
+    m.innerHTML = `<form class="modal" style="max-width:440px"><p style="margin-bottom:10px;font-weight:600">${esc(msg)}</p><input name="v" type="${type}" value="${esc(def)}" autocomplete="off"><div class="acts" style="margin-top:14px"><button class="btn primary">Valider</button><button type="button" class="btn" data-x>Annuler</button></div></form>`;
+    const done = v => { m.remove(); res(v); };
+    m.querySelector('form').addEventListener('submit', e => { e.preventDefault(); done(e.target.v.value); });
+    m.querySelector('[data-x]').addEventListener('click', () => done(null));
+    document.body.appendChild(m); m.querySelector('input').focus();
+  });
+}
+function openFiche(id) {
+  const a = DB.agents.find(x => x.id === id); if (!a) return;
+  const f = (l, v) => `<div><dt>${l}</dt><dd>${v ? esc(v) : '<span class="muted">Non renseigné</span>'}</dd></div>`, ag = age(a.naissance);
+  const rank = sortAgents(DB.agents.filter(x => x.direction === a.direction), 'hier').findIndex(x => x.id === a.id) + 1;
+  openModal(`<div class="printhead"><b>République Démocratique du Congo</b><br>Ministère de l’Intérieur, Sécurité, Décentralisation et Affaires Coutumières<br>Direction de Suivi des Finances Locales<h3 style="margin-top:8px">Fiche d’agent</h3></div>
+    <div class="fiche-top">${avatar(a)}<div><h3>${esc(fullName(a))}</h3><span class="muted" style="font-size:13px">${esc(a.fonction || a.grade || '')}</span>
+      <div class="badges">${a.situation ? `<span class="badge ok">${esc(a.situation)}</span>` : ''}${a.division ? `<span class="badge">${esc(a.division)}</span>` : ''}${incomplete(a) ? '<span class="badge warn">Dossier incomplet</span>' : ''}</div></div></div>
+    <dl class="f">${f('Matricule', a.matricule)}${f('N° acte d’engagement', a.acte)}${f('Date d’engagement', fmtDate(a.engagement))}${f('Situation', a.situation)}
+      ${f('Date de naissance', fmtDate(a.naissance) + (ag != null ? ` (${ag} ans)` : ''))}${f('Sexe', SEX[a.sexe])}${f('État civil', a.etat_civil)}${f('Diplôme', a.diplome)}
+      ${f('Grade', canonGrade(a.grade) + (gradeCode(a.grade) !== canonGrade(a.grade) ? ' (' + gradeCode(a.grade) + ')' : ''))}${f('Fonction', a.fonction)}${f('Direction', a.direction)}${f('Division', a.division)}${f('Bureau', a.bureau)}${f('Salaire', a.salaire)}${f('Montant du salaire', a.salaire_montant)}${f('Prime', a.prime)}${f('Montant de la prime', a.prime_montant)}${f('Recensé', a.recense)}${f('Observation', a.observation)}${f('Prise en charge', a.prise_en_charge)}${f('Fiche créée le', a.created ? new Date(a.created).toLocaleDateString('fr-FR') : '')}${a.updated && a.updated !== a.created ? f('Dernière modification', new Date(a.updated).toLocaleDateString('fr-FR')) : ''}</dl>
+    <div class="noprint"><div class="placed">
+      <a href="#/mise-en-place" data-act="close">${ico('layers', 20)}<span><b>Mise en place</b>${esc(a.division || 'Sans division')}</span></a>
+      <a href="#/cadre" data-act="close">${ico('org', 20)}<span><b>Cadre organique</b>${esc(a.grade || 'Grade non renseigné')}</span></a>
+      <a href="#/liste" data-act="close">${ico('list', 20)}<span><b>Liste déclarative</b>N° ${rank} sur ${DB.agents.filter(x => x.direction === a.direction).length}</span></a></div>
+    <div class="acts"><a class="btn primary" href="#/nouveau/${a.id}" data-act="close">Modifier</a>
+      ${isNative() ? '' : `<button class="btn" data-act="print">${ico('print', 18)}Imprimer</button>`}
+      ${session.role === 'admin' ? `<button class="btn danger" data-act="delagent" data-id="${a.id}">Supprimer</button>` : ''}
+      <button class="btn" data-act="close">Fermer</button></div></div>`);
+}
+
+/* ---------- Formulaire ---------- */
+function divOptions(dir, sel) {
+  if (DB.org && DB.org.divisions && DB.org.divisions.length) {
+    return '<option value="">Choisir…</option>' + DB.org.divisions.map(v => `<option ${v.name === sel ? 'selected' : ''}>${esc(v.name)}</option>`).join('');
+  }
+  const d = DB.directions.find(x => x.name === dir);
+  return '<option value="">Choisir…</option>' + (d ? divOrder(d) : []).map(v => `<option ${v === sel ? 'selected' : ''}>${esc(v)}</option>`).join('');
+}
+function bureauOptions(divName, sel) {
+  const div = (DB.org && DB.org.divisions || []).find(x => x.name === divName);
+  const list = div ? div.bureaux.map(b => b.name) : [];
+  return '<option value="">Choisir…</option>' + list.map(v => `<option ${v === sel ? 'selected' : ''}>${esc(v)}</option>`).join('');
+}
+function syncOrgToDirections() {
+  if (!DB.org || !DB.directions[0]) return;
+  DB.directions[0].divisions = DB.org.divisions.map(d => d.name);
+}
+function gradeOptions(sel) {
+  const cur = canonGrade(sel), list = GRADES.map(g => g.l); if (cur && !list.includes(cur)) list.push(cur);
+  return '<option value="">Choisir…</option>' + list.map(l => { const g = GRADES.find(x => x.l === l); return `<option value="${esc(l)}" ${l === cur ? 'selected' : ''}>${esc(l)}${g && g.c ? ' (' + g.c + ')' : ''}</option>`; }).join('');
+}
+function pForm(id) {
+  const a = id ? DB.agents.find(x => x.id === id) : null;
+  if (id && !a) return '<div class="empty">Agent introuvable.</div>';
+  const v = a || { situation: 'Actif', salaire: 'Non', prime: 'Non', recense: 'Non', direction: DB.directions[0].name };
+  formPhoto = a ? (a.photo || '') : '';
+  const opt = (arr, sel) => '<option value="">Choisir…</option>' + arr.map(x => `<option ${x === sel ? 'selected' : ''}>${esc(x)}</option>`).join('');
+  const radio = (n, list, val, req) => `<div class="radios">${list.map((o, i) => `<label class="rd"><input type="radio" name="${n}" value="${o[0]}" ${val === o[0] ? 'checked' : ''} ${req && i === 0 ? 'required' : ''}>${o[1]}</label>`).join('')}</div>`;
+  const yn = [['Oui', 'Oui'], ['Non', 'Non']], sec = (n, t) => `<legend><i>${n}</i>${t}</legend>`;
+  return `<header class="ph"><div><h2>${a ? 'Modifier l’agent' : 'Nouvel agent recruté'}</h2><p class="sub">Les champs marqués * sont obligatoires. L’agent sera placé automatiquement dans les 3 documents.</p></div></header>
+  <form data-f="agent" data-id="${a ? a.id : ''}" autocomplete="off">
+    <fieldset class="fsec">${sec(1, 'Identité')}<div class="grid">
+      <label>Nom *<input name="nom" value="${esc(v.nom)}" required></label><label>Postnom *<input name="postnom" value="${esc(v.postnom)}" required></label>
+      <label>Prénom<input name="prenom" value="${esc(v.prenom)}"></label><label>Date de naissance<input type="date" name="naissance" value="${esc(v.naissance)}"></label>
+      <div><label>Sexe *</label>${radio('sexe', [['M', 'Masculin'], ['F', 'Féminin']], v.sexe, true)}</div>
+      <label>État civil<select name="etat_civil">${opt(ETATS, v.etat_civil)}</select></label>
+      <label>Diplôme<input name="diplome" list="dl-dip" value="${esc(v.diplome)}"></label></div></fieldset>
+    <fieldset class="fsec">${sec(2, 'Engagement')}<div class="grid">
+      <label>Matricule<input name="matricule" value="${esc(v.matricule)}"></label><label>N° de l’acte d’engagement<input name="acte" value="${esc(v.acte)}"></label>
+      <label>Date d’engagement<input type="date" name="engagement" value="${esc(v.engagement)}"></label><label>Grade<select name="grade" id="fmGrade">${gradeOptions(v.grade)}</select></label>
+      <label>Fonction<input name="fonction" id="fmFonc" list="dl-fonc" value="${esc(v.fonction)}"></label><label>Situation<select name="situation">${opt(SITU, v.situation)}</select></label></div></fieldset>
+    <fieldset class="fsec">${sec(3, 'Affectation')}<div class="grid">
+      <label>Direction *<select name="direction" id="fmDir" required>${DB.directions.map(d => `<option ${d.name === v.direction ? 'selected' : ''}>${esc(d.name)}</option>`).join('')}</select></label>
+      <label>Division *<select name="division" id="fmDiv" required>${divOptions(v.direction, v.division)}</select></label>
+      <label>Bureau *<select name="bureau" id="fmBur" required>${bureauOptions(v.division, v.bureau)}</select></label></div></fieldset>
+    <fieldset class="fsec">${sec(4, 'Rémunération et suivi')}<div class="grid">
+      <div><label>Salaire</label>${radio('salaire', yn, v.salaire)}</div><label>Montant du salaire<input name="salaire_montant" inputmode="decimal" value="${esc(v.salaire_montant)}"></label>
+      <div><label>Prime</label>${radio('prime', yn, v.prime)}</div><label>Montant de la prime<input name="prime_montant" inputmode="decimal" value="${esc(v.prime_montant)}"></label>
+      <div><label>Recensé</label>${radio('recense', yn, v.recense)}</div>
+      <label>Prise en charge<select name="prise_en_charge">${opt(PRISE, v.prise_en_charge)}</select></label>
+      <label style="grid-column:1/-1">Observation<textarea name="observation" rows="2">${esc(v.observation)}</textarea></label></div></fieldset>
+    <fieldset class="fsec">${sec(5, 'Photo')}<div class="photo-box"><span class="av" id="phPrev">${formPhoto ? `<img src="${formPhoto}" alt="">` : '+'}</span>
+      <div><input type="file" id="phIn" accept="image/*"><button type="button" class="btn sm" data-act="rmphoto" style="margin-top:8px">Retirer la photo</button></div></div></fieldset>
+    <datalist id="dl-dip">${DIPLOMES.map(x => `<option value="${esc(x)}">`).join('')}</datalist><datalist id="dl-fonc">${FONCTIONS.map(x => `<option value="${x}">`).join('')}</datalist>
+    <div class="formbar"><button class="btn primary">${ico('check', 18)}Enregistrer l’agent</button><a class="btn" href="#/liste">Annuler</a></div></form>`;
+}
+function resizeImg(file, max = 240) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => { const im = new Image(); im.onload = () => { const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', 0.72)); }; im.onerror = rej; im.src = fr.result; };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+
+/* ---------- Les 3 documents : Mise en place, Cadre organique, Liste déclarative ---------- */
+const selDirs = () => ui.dir ? DB.directions.filter(d => d.name === ui.dir) : DB.directions;
+const seg = active => `<div class="seg noprint">${DOCS.map(r => `<a href="#/${r}" ${r === active ? 'aria-current="page"' : ''}>${ico({ 'mise-en-place': 'layers', cadre: 'org', liste: 'list' }[r], 17)}${DOCTITLE[r].replace(' des agents', '').replace(' du personnel', '')}</a>`).join('')}</div>`;
+const LETTER = n => ['RÉPUBLIQUE DÉMOCRATIQUE DU CONGO', 'MINISTÈRE DE L’INTÉRIEUR, SÉCURITÉ, DÉCENTRALISATION ET AFFAIRES COUTUMIÈRES', 'DIRECTION DE SUIVI DES FINANCES LOCALES'].map(t => `<tr><th class="t sm" colspan="${n}"><div class="stk">${t}</div></th></tr>`).join('');
+const printHead = kind => '';
+function pDoc(kind) {
+  const desc = { 'mise-en-place': 'Secrétariat, 4 divisions et 8 bureaux. Les agents sont répartis automatiquement selon leur affectation.', cadre: 'Effectif prévu par grade et par unité, comparé aux agents en place.', liste: `Liste déclarative des agents de la Direction – année ${DB.meta.annee}.` }[kind];
+  const dirSel = DB.directions.length > 1 ? `<select id="tDir" aria-label="Direction"><option value="">Toutes les directions</option>${DB.directions.map(d => `<option ${d.name === ui.dir ? 'selected' : ''}>${esc(d.name)}</option>`).join('')}</select>` : '';
+  const extra = kind === 'liste' ? `<select id="tDiv" aria-label="Division"></select><select id="tSit" aria-label="Situation"><option value="">Toutes les situations</option>${SITU.map(s => `<option>${s}</option>`).join('')}</select><select id="tSort" aria-label="Tri"><option value="hier">Tri : hiérarchie</option><option value="alpha">Tri : alphabétique</option><option value="mat">Tri : matricule</option></select>` : '';
+  const search = kind !== 'cadre' ? '<input id="tq" type="search" class="wide" placeholder="Rechercher un agent…" aria-label="Rechercher">' : '';
+  return `${printHead(kind)}<header class="ph"><div><h2>${DOCTITLE[kind]}</h2><p class="sub">${desc}</p></div>
+    <div class="acts noprint"><a class="btn" href="#/importer/${{ 'mise-en-place': 'mise', cadre: 'cadre', liste: 'agents' }[kind]}">${ico('upload', 18)}Importer</a><button class="btn" data-act="exp" data-k="${kind}">${ico('download', 18)}Exporter Excel</button>${isNative() ? '' : `<button class="btn" data-act="print">${ico('print', 18)}Imprimer</button>`}</div></header>
+    ${seg(kind)}<div class="tools noprint">${search}${dirSel}${extra}</div><div id="doc"></div>`;
+}
+function docRows(kind) {
+  if (kind === 'mise-en-place') {
+    const rows = [];
+    DB.org.divisions.forEach(div => {
+      const add = (bur, list) => sortAgents(list, 'hier').forEach((a, i) => rows.push([div.name, bur, i + 1, a.matricule, fullName(a), canonGrade(a.grade), a.fonction]));
+      (div.bureaux || []).forEach(bur => add(bur.name, DB.agents.filter(a => a.division === div.name && a.bureau === bur.name)));
+      add('—', DB.agents.filter(a => a.division === div.name && !(div.bureaux || []).some(b => b.name === a.bureau)));
+    });
+    return { header: ['Division', 'Bureau', 'N°', 'Matricule', 'Noms', 'Grade', 'Fonction'], rows };
+  }
+  if (kind === 'cadre') {
+    const rows = cadreRows(DB.directions[0].name).map(r => [r.grade, r.prevu, r.enplace, r.prevu - r.enplace]);
+    rows.push([], ['Unité', 'Effectif prévu', 'En place', 'Écart']);
+    unitRows().filter(u => u.type !== 'div').forEach(u => rows.push([u.name, u.prevu, u.enplace, u.prevu - u.enplace]));
+    return { header: ['Structure', 'Effectif prévu', 'En place', 'Écart'], rows };
+  }
+  const L = listeAgents();
+  return { header: LISTE_HEAD, rows: L.map((a, i) => listeCells(a, i)) };
+}
+const LISTE_HEAD = ['N°', 'Noms, post-noms, prénoms', 'Date de naissance', 'Date d’engagement', 'N° d’acte d’engagement', 'Sexe', 'Matricule', 'Grade', 'Fonction', 'Service d’affectation', 'Salaire', 'Montant', 'Prime', 'Montant', 'Recensé', 'Observation'];
+const listeCells = (a, i) => [i + 1, fullName(a), fmtDate(a.naissance), fmtDate(a.engagement), a.acte, a.sexe, a.matricule, gradeCode(a.grade), a.fonction, a.direction, (a.salaire || '').toUpperCase(), a.salaire_montant, (a.prime || '').toUpperCase(), a.prime_montant, (a.recense || '').toUpperCase(), a.observation];
+function listeAgents() {
+  const q = norm($('#tq') ? $('#tq').value : ''), v = $('#tDiv') ? $('#tDiv').value : '', s = $('#tSit') ? $('#tSit').value : '', sort = $('#tSort') ? $('#tSort').value : 'hier';
+  return sortAgents(DB.agents.filter(a => (!ui.dir || a.direction === ui.dir) && (!v || a.division === v) && (!s || a.situation === s) &&
+    (!q || norm([a.nom, a.postnom, a.prenom, a.matricule, a.fonction, a.grade, a.acte, a.division].join(' ')).includes(q))), sort);
+}
+function renderMise() {
+  const q = norm(($('#tq') && $('#tq').value) || ''), admin = session && session.role === 'admin', org = DB.org || defaultOrg();
+  const hit = a => !q || norm([a.nom, a.postnom, a.prenom, a.matricule, a.fonction, a.grade, a.bureau].join(' ')).includes(q);
+  const inp = (k, val, ph, at = '') => admin ? `<input data-org="${k}" ${at} value="${esc(val || '')}" placeholder="${ph}">` : esc(val || 'Non renseigné');
+  const cnt = (a, b) => DB.agents.filter(x => x.division === a && (b === undefined || x.bureau === b)).length;
+  let html = `<div class="xlwrap" style="max-height:none"><table class="tbl xl wrap"><thead>${LETTER(3)}<tr><th class="t last" colspan="3">MISE EN PLACE DU PERSONNEL DE LA DIRECTION</th></tr>
+    <tr><th class="l">FONCTION</th><th class="l" colspan="2">NOM</th></tr></thead><tbody><tr style="cursor:default"><td class="l"><b>Directeur - Chef de service</b></td><td class="l" colspan="2">${inp('directeur', org.directeur, 'Nom du Directeur')}</td></tr></tbody></table></div>`;
+  org.divisions.forEach((div, di) => {
+    const sec = div.kind === 'sec', title = sec ? 'SECRÉTARIAT DE DIRECTION' : `DIVISION ${di + 1}`;
+    html += `<div class="xlwrap" style="max-height:none"><table class="tbl xl wrap"><thead><tr><th class="t lft last" colspan="3">${title}${sec ? '' : ' : ' + esc(div.name.toUpperCase())}</th></tr>
+      <tr><th class="l">UNITÉ</th><th class="l">RESPONSABLE</th><th>EFFECTIF EN PLACE</th></tr></thead><tbody>
+      <tr class="grp" style="cursor:default"><td class="l">${sec ? 'Secrétariat' : 'Division'}${admin ? `<br>${inp('divname', div.name, 'Nom', `data-i="${di}"`)}` : ''}</td><td class="l">${sec ? 'CB' : 'CD'} : ${inp('cd', div.cd, sec ? 'Nom du CB' : 'Nom du CD', `data-i="${di}"`)}</td><td class="c">${cnt(div.name)}</td></tr>
+      ${(div.bureaux || []).map((b, bi) => `<tr style="cursor:default"><td class="l">${admin ? inp('burname', b.name, 'Bureau', `data-i="${di}" data-j="${bi}"`) : esc(b.name)}</td><td class="l">CB : ${inp('cb', b.cb, 'Nom du CB', `data-i="${di}" data-j="${bi}"`)}</td><td class="c">${cnt(div.name, b.name)}</td></tr>`).join('')}</tbody></table></div>`;
+  });
+  /* Listes d'agents, en bas */
+  html += `<h3 class="sec2" style="margin:22px 0 10px">Liste des agents par division et par bureau</h3>`;
+  const rowsOf = (list, n0 = 0) => list.map((a, i) => `<tr data-act="fiche" data-id="${a.id}"><td class="c">${i + 1}</td><td class="l"><b>${esc(fullName(a))}</b></td><td class="l">${esc(gradeCode(a.grade))}</td><td class="c">${esc(a.fonction)}</td><td class="l">${esc(a.matricule)}</td><td class="c">${a.sexe || ''}</td></tr>`).join('');
+  const head = '<tr><th style="width:46px">N°</th><th class="l">NOMS, POST-NOMS, PRÉNOMS</th><th>GRADE</th><th>FONCTION</th><th class="l">MATRICULE</th><th>SEXE</th></tr>';
+  const MAXR = 300;
+  const block = (label, list) => {
+    const L = sortAgents(list, 'hier').slice(0, MAXR);
+    return `<tr class="bh"><td colspan="6">${esc(label)} — ${list.length} agent${list.length > 1 ? 's' : ''}</td></tr>${list.length ? rowsOf(L) : '<tr style="cursor:default"><td colspan="6" class="l muted">Aucun agent.</td></tr>'}${list.length > MAXR ? `<tr style="cursor:default"><td colspan="6" class="l muted">${MAXR} premiers agents affichés. Utilisez la recherche pour trouver les autres.</td></tr>` : ''}`;
+  };
+  org.divisions.forEach((div, di) => {
+    const sec = div.kind === 'sec', all = DB.agents.filter(a => a.division === div.name && hit(a));
+    let body = '';
+    (div.bureaux || []).forEach(b => body += block(b.name, all.filter(a => a.bureau === b.name)));
+    const rest = all.filter(a => sec || !(div.bureaux || []).some(b => b.name === a.bureau));
+    if (sec) body += block('Secrétariat de Direction', rest); else if (rest.length) body += block('Agents de la division sans bureau', rest);
+    html += `<div class="xlwrap" style="max-height:none"><table class="tbl xl wrap"><thead><tr><th class="t lft last" colspan="6">${sec ? 'SECRÉTARIAT DE DIRECTION' : `DIVISION ${di + 1} : ${esc(div.name.toUpperCase())}`} — ${all.length} agent${all.length > 1 ? 's' : ''}</th></tr>${head}</thead><tbody class="ag">${body}</tbody></table></div>`;
+  });
+  const known = new Set(org.divisions.map(x => x.name)), un = DB.agents.filter(a => !known.has(a.division) && hit(a));
+  if (un.length) html += `<div class="xlwrap" style="max-height:none"><table class="tbl xl wrap"><thead><tr><th class="t lft last" colspan="6">AGENTS SANS AFFECTATION — ${un.length}</th></tr>${head}</thead><tbody class="ag">${block('Division non renseignée (à compléter par « Modifier » sur la fiche)', un)}</tbody></table></div>`;
+  $('#doc').innerHTML = html;
+  if (admin) $$('#doc [data-org]').forEach(el => el.addEventListener('change', () => {
+    const k = el.dataset.org, i = +el.dataset.i, j = +el.dataset.j, val = el.value.trim();
+    if (k === 'directeur') DB.org.directeur = val;
+    else if (k === 'divname') { const o = DB.org.divisions[i].name; DB.org.divisions[i].name = val || o; DB.agents.forEach(a => { if (a.division === o) a.division = DB.org.divisions[i].name; }); syncOrgToDirections(); }
+    else if (k === 'cd') DB.org.divisions[i].cd = val;
+    else if (k === 'burname') { const o = DB.org.divisions[i].bureaux[j].name; DB.org.divisions[i].bureaux[j].name = val || o; DB.agents.forEach(a => { if (a.division === DB.org.divisions[i].name && a.bureau === o) a.bureau = DB.org.divisions[i].bureaux[j].name; }); }
+    else if (k === 'cb') DB.org.divisions[i].bureaux[j].cb = val;
+    save(); toast('Structure mise à jour'); renderMise();
+  }));
+}
+function renderCadre() {
+  const admin = session && (session.role === 'admin' || session.role === 'cd'), dir = DB.directions[0].name;
+  const rows = cadreRows(dir), P = rows.reduce((s, r) => s + r.prevu, 0), E = rows.reduce((s, r) => s + r.enplace, 0);
+  const ecart = (p, e) => { const x = p - e; return p === 0 && e > 0 ? '<span class="badge">Hors cadre</span>' : x > 0 ? `<span class="badge warn">${x} vacant${x > 1 ? 's' : ''}</span>` : x === 0 ? '<span class="badge ok">Complet</span>' : `<span class="badge bad">+${-x} en surnombre</span>`; };
+  const key = `data-dir="${esc(dir)}" data-div=""`;
+  const gr = rows.map(r => `<tr style="cursor:default"><td class="l">${esc(r.grade)}${GRADES.find(g => g.l === r.grade && g.c) ? ` <span class="muted">(${GRADES.find(g => g.l === r.grade).c})</span>` : ''}</td>
+    <td class="c">${admin ? `<input class="num" type="number" min="0" inputmode="numeric" value="${r.prevu}" data-prevu ${key} data-grade="${esc(r.grade)}" aria-label="Effectif prévu">` : r.prevu}</td>
+    <td class="c">${r.enplace}</td><td>${ecart(r.prevu, r.enplace)}</td>${admin ? `<td>${r.id ? `<button class="btn sm danger" data-act="cadrerm" data-id="${r.id}" aria-label="Retirer ce grade">×</button>` : ''}</td>` : ''}</tr>`).join('');
+  const units = unitRows(); let UP = 0, UE = 0;
+  const ur = units.map(u => {
+    if (u.type === 'div') return `<tr class="grp" style="cursor:default"><td class="l" colspan="${admin ? 5 : 4}">${esc(u.name)}<span class="muted" style="font-weight:500"> — CD : ${esc(u.resp || 'non renseigné')}</span></td></tr>`;
+    UP += u.prevu; UE += u.enplace;
+    const inp = u.type === 'none' ? '' : `<input class="num" type="number" min="0" inputmode="numeric" value="${u.prevu}" data-uprevu data-i="${u.i}" data-j="${u.j ?? ''}" aria-label="Effectif prévu">`;
+    return `<tr style="cursor:default"><td class="l">${esc(u.name)}<br><small class="muted">${u.type === 'none' ? 'Division non renseignée' : (u.type === 'sec' ? 'CB' : 'CB') + ' : ' + esc(u.resp || 'non renseigné')}</small></td><td class="c">${u.type === 'none' ? '–' : admin ? inp : u.prevu}</td><td class="c">${u.enplace}</td><td>${u.type === 'none' ? '' : ecart(u.prevu, u.enplace)}</td>${admin ? '<td></td>' : ''}</tr>`;
+  }).join('');
+  const kp = `<div class="stats">${stat('org', '', P, 'effectif prévu')}${stat('users', 'g', E, 'agents en place')}${stat('alert', 'y', rows.reduce((t, r) => t + Math.max(0, r.prevu - r.enplace), 0), 'postes vacants')}${stat('chart', 'r', rows.reduce((s, r) => s + Math.max(0, r.enplace - r.prevu), 0), 'en surnombre / hors cadre')}</div>`;
+  const titre = t2 => LETTER(admin ? 5 : 4) + `<tr><th class="t last" colspan="${admin ? 5 : 4}">${t2}</th></tr>`;
+  $('#doc').innerHTML = kp + `<div class="xlwrap"><table class="tbl xl"><thead>${titre('CADRE ORGANIQUE (mis à jour)')}<tr><th class="l">STRUCTURE</th><th>EFFECTIF PRÉVU</th><th>EN PLACE</th><th>ÉCART</th>${admin ? '<th></th>' : ''}</tr></thead><tbody>${gr}</tbody>
+    <tfoot><tr><td class="l">Total</td><td class="c">${P}</td><td class="c">${E}</td><td>${P > E ? (P - E) + ' vacant' + (P - E > 1 ? 's' : '') : ''}</td>${admin ? '<td></td>' : ''}</tr></tfoot></table></div>
+    ${admin ? `<form class="addpost noprint" data-f="addpost" ${key}><input name="g" list="dl-grade" placeholder="Ajouter un grade" required aria-label="Grade"><input name="p" type="number" min="0" value="1" style="width:86px" aria-label="Effectif prévu"><button class="btn sm primary">Ajouter</button></form>` : ''}
+    <div class="xlwrap" style="margin-top:16px"><table class="tbl xl"><thead>${titre('EFFECTIF PAR UNITÉ')}<tr><th class="l">UNITÉ</th><th>EFFECTIF PRÉVU</th><th>EN PLACE</th><th>ÉCART</th>${admin ? '<th></th>' : ''}</tr></thead><tbody>${ur}</tbody>
+    <tfoot><tr><td class="l">Total</td><td class="c">${UP}</td><td class="c">${UE}</td><td></td>${admin ? '<td></td>' : ''}</tr></tfoot></table></div>
+    <datalist id="dl-grade">${GRADES.map(x => `<option value="${esc(x.l)}">`).join('')}</datalist>`;
+}
+function renderListe() {
+  const L = listeAgents(), m = L.filter(a => a.sexe === 'M').length, f = L.filter(a => a.sexe === 'F').length;
+  if (!L.length) { $('#doc').innerHTML = '<div class="empty">Aucun agent à afficher.<br><br><a class="btn primary" href="#/nouveau">Ajouter un agent</a> <a class="btn" href="#/importer/agents">Importer un fichier</a></div>'; return; }
+  const ctr = new Set([0, 5, 10, 12, 14]), cl = k => k === 0 ? 's1 c' : k === 1 ? 's2 l' : ctr.has(k) ? 'c' : 'l';
+  $('#doc').innerHTML = `<div class="xlwrap"><table class="tbl xl"><thead>${LETTER(LISTE_HEAD.length)}<tr><th class="t last" colspan="${LISTE_HEAD.length}"><div class="stk">LISTE DÉCLARATIVE DES AGENTS DE LA DIRECTION DE SUIVI DES FINANCES LOCALES ${DB.meta.annee}</div></th></tr>
+    <tr>${LISTE_HEAD.map((h, k) => `<th class="${k === 0 ? 's1' : k === 1 ? 's2' : ''}">${esc(h)}</th>`).join('')}</tr></thead><tbody>
+    ${L.map((a, i) => `<tr data-act="fiche" data-id="${a.id}">${listeCells(a, i).map((v, k) => `<td class="${cl(k)}">${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody>
+    <tfoot><tr><td class="s1"></td><td class="s2 l">Effectif : ${L.length}</td><td colspan="${LISTE_HEAD.length - 2}" class="l">Hommes : ${m} · Femmes : ${f}</td></tr></tfoot></table></div>`;
+}
+const renderDoc = kind => ({ 'mise-en-place': renderMise, cadre: renderCadre, liste: renderListe }[kind])();
+function fillTDiv() { const s = $('#tDiv'); if (!s) return; const cur = s.value; s.innerHTML = '<option value="">Toutes les divisions</option>' + allDivisions(ui.dir).map(v => `<option>${esc(v)}</option>`).join(''); s.value = cur; }
+
+/* ---------- Importer un fichier ---------- */
+function pImport(arg) {
+  const md = arg === 'cadre' ? 'cadre' : arg === 'mise' ? 'mise' : 'agents';
+  return `<header class="ph"><div><h2>Importer un fichier</h2><p class="sub">Excel (.xlsx), Word (.docx) ou CSV. Choisissez ce que contient le fichier, vérifiez l’aperçu, puis importez.</p></div></header>
+  <section class="card"><h3 style="margin-bottom:12px">1. Choisir le fichier</h3>
+    <label class="drop" for="impFile">${ico('upload')}<b>Toucher pour choisir un fichier</b><span>.xlsx, .xls, .csv, .docx, .pdf</span></label>
+    <input id="impFile" type="file" accept=".xlsx,.xls,.xlsm,.csv,.txt,.docx,.pdf" hidden>
+    <div class="grid sec2"><div><label>Le fichier contient</label><div class="radios"><label class="rd"><input type="radio" name="impMode" value="agents" ${md === 'agents' ? 'checked' : ''}>Liste déclarative (agents)</label><label class="rd"><input type="radio" name="impMode" value="mise" ${md === 'mise' ? 'checked' : ''}>Mise en place (tableau Word par bureau)</label><label class="rd"><input type="radio" name="impMode" value="cadre" ${md === 'cadre' ? 'checked' : ''}>Cadre organique (postes prévus)</label></div></div>
+      <label>Direction par défaut<select id="impDir">${DB.directions.map(d => `<option>${esc(d.name)}</option>`).join('')}</select></label></div>
+    <label class="rd sec2" style="display:flex"><input type="checkbox" id="impSheet">Utiliser le nom de la feuille / du tableau comme division (si le fichier n’a pas de colonne « Division »)</label>
+    <p class="sub sec2">Pas de fichier prêt ? <button class="linkbtn" data-act="template">Télécharger un modèle Excel</button></p></section>
+  <div id="impPreview" style="margin-top:14px"></div>`;
+}
+function colLabel(t, ci) { const h = String((t.aoa[t.hi] || [])[ci] ?? '').trim(); return `${ci + 1}. ${h || '(vide)'}`.slice(0, 48); }
+function buildImport() {
+  const mode = imp.mode, res = { items: [], skipped: 0, tables: [] };
+  imp.tables.forEach(t => {
+    const opt = { dir: imp.dir, sheetAsDiv: imp.sheetAsDiv }, keys = mode === 'agents' ? AKEYS : CKEYS; let n = 0;
+    if (t.map && Object.keys(t.map).length) t.aoa.slice(t.hi + 1).forEach(r => {
+      if (!r.some(c => String(c ?? '').trim() !== '') || isTotalRow(r) || looksLikeHeader(r, keys)) return;
+      const x = mode === 'agents' ? rowToAgent(r, t.map, opt, t.name) : rowToPost(r, t.map, opt, t.name);
+      if (x) { res.items.push(x); n++; } else res.skipped++;
+    });
+    res.tables.push(n);
+  });
+  return res;
+}
+function renderPreview() {
+  const box = $('#impPreview'); if (!imp || !imp.tables.length) { box.innerHTML = ''; return; }
+  const mode = imp.mode, res = buildImport(), fields = mode === 'agents' ? FIELDS : CFIELDS;
+  let nw = 0, up = 0, hom = 0;
+  if (mode === 'agents') { const keys = new Set(DB.agents.map(agentKey)); res.items.forEach(a => keys.has(agentKey(a)) ? up++ : nw++); const c = {}; res.items.forEach(a => { const k = agentKey(a); c[k] = (c[k] || 0) + 1; }); hom = Object.values(c).filter(x => x > 1).reduce((s, x) => s + x - 1, 0); }
+  const maps = imp.tables.map((t, ti) => `<details class="map" ${!res.tables[ti] ? 'open' : ''}><summary>${esc(t.name)} — ${res.tables[ti]} ligne${res.tables[ti] > 1 ? 's' : ''} reconnue${res.tables[ti] > 1 ? 's' : ''}</summary>
+    <div class="kv">${Object.keys(t.map || {}).map(k => `<span class="badge ok">${esc((fields.find(f => f[0] === k) || [k, k])[1].split(' (')[0])} ← ${esc(colLabel(t, t.map[k]).replace(/^\d+\.\s/, ''))}</span>`).join('') || '<span class="badge warn">Aucune colonne reconnue</span>'}</div>
+    <div class="grid"><label>Ligne des titres<input type="number" min="1" value="${t.hi + 1}" data-imp="${ti}|hi"></label>
+    ${fields.map(([k, l]) => `<label>${l}<select data-imp="${ti}|${k}"><option value="">— ignorer —</option>${(t.aoa[t.hi] || []).map((c, ci) => `<option value="${ci}" ${t.map && t.map[k] === ci ? 'selected' : ''}>${esc(colLabel(t, ci))}</option>`).join('')}</select></label>`).join('')}</div></details>`).join('');
+  const sample = mode === 'agents'
+    ? `<div class="tw" style="max-height:none;margin-top:12px"><table class="tbl"><thead><tr><th>Matricule</th><th>Noms</th><th class="c">Sexe</th><th>Grade</th><th>Division</th></tr></thead><tbody>${res.items.slice(0, 6).map(a => `<tr style="cursor:default"><td>${esc(a.matricule)}</td><td>${esc(fullName(a))}</td><td class="c">${a.sexe}</td><td>${esc(a.grade)}</td><td>${esc(a.division)}</td></tr>`).join('')}</tbody></table></div>`
+    : `<div class="tw" style="max-height:none;margin-top:12px"><table class="tbl"><thead><tr><th>Division</th><th>Grade / poste</th><th class="c">Prévu</th></tr></thead><tbody>${res.items.slice(0, 6).map(a => `<tr style="cursor:default"><td>${esc(a.division)}</td><td>${esc(a.grade)}</td><td class="c">${a.prevu}</td></tr>`).join('')}</tbody></table></div>`;
+  const n = res.items.length;
+  box.innerHTML = `<section class="card"><h3 style="margin-bottom:10px">2. Vérifier avant d’importer</h3>
+    ${n ? `<p><span class="badge ok">${ico('check', 14)} ${n} ${mode === 'agents' ? 'agent' : 'poste'}${n > 1 ? 's' : ''} reconnu${n > 1 ? 's' : ''}</span> ${mode === 'agents' ? `<span class="badge">${nw} nouveau${nw > 1 ? 'x' : ''}</span> <span class="badge">${up} à mettre à jour</span>${hom ? ` <span class="badge bad">${ico('alert', 13)} ${hom} doublon(s) — fusion à l’import</span>` : ''}` : ''} ${res.skipped ? `<span class="badge warn">${res.skipped} ligne${res.skipped > 1 ? 's' : ''} ignorée${res.skipped > 1 ? 's' : ''}</span>` : ''}</p>${sample}`
+      : '<div class="warn" style="margin:0">Aucune ligne reconnue. Ouvrez la section ci-dessous pour indiquer la ligne des titres et les colonnes, ou changez le type de contenu.</div>'}
+    ${maps}
+    <div class="acts sec2"><button class="btn primary" data-act="impapply" ${n ? '' : 'disabled'}>${ico('check', 18)}Importer ${n || ''} ${mode === 'agents' ? 'agent' : 'poste'}${n > 1 ? 's' : ''}</button></div></section>`;
+}
+function htmlTables(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html'), out = [];
+  doc.querySelectorAll('table').forEach((t, i) => out.push({ name: 'Tableau ' + (i + 1), aoa: [...t.querySelectorAll('tr')].map(tr => [...tr.children].map(c => c.textContent.trim())) }));
+  if (!out.length) out.push({ name: 'Texte', aoa: [...doc.querySelectorAll('p')].map(p => p.textContent.trim()).filter(Boolean).map(l => l.split(/\t| {2,}|;/).map(s => s.trim())) });
+  return out;
+}
+/* Lecteur intégré : xlsx et docx fonctionnent sans bibliothèque externe */
+async function inflateRaw(data) {
+  const ds = new DecompressionStream('deflate-raw'), w = ds.writable.getWriter(); w.write(data); w.close();
+  return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+}
+async function unzip(buf) {
+  const u8 = new Uint8Array(buf), dv = new DataView(buf), td = new TextDecoder(); let e = u8.length - 22;
+  while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+  if (e < 0) throw new Error('Fichier illisible (archive invalide).');
+  const n = dv.getUint16(e + 10, true); let off = dv.getUint32(e + 16, true); const files = {};
+  for (let i = 0; i < n; i++) {
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    const method = dv.getUint16(off + 10, true), csize = dv.getUint32(off + 20, true), nl = dv.getUint16(off + 28, true), el = dv.getUint16(off + 30, true), cl = dv.getUint16(off + 32, true), lho = dv.getUint32(off + 42, true);
+    files[td.decode(u8.subarray(off + 46, off + 46 + nl))] = { method, csize, lho }; off += 46 + nl + el + cl;
+  }
+  return async name => {
+    const f = files[name]; if (!f) return null;
+    const nl = dv.getUint16(f.lho + 26, true), el = dv.getUint16(f.lho + 28, true), st = f.lho + 30 + nl + el, data = u8.subarray(st, st + f.csize);
+    return td.decode(f.method === 0 ? data : await inflateRaw(data));
+  };
+}
+const xmlDoc = t => new DOMParser().parseFromString(t, 'application/xml');
+const kids = (el, ln) => [...el.childNodes].filter(c => c.localName === ln);
+const colIdx = ref => { let n = 0; for (const ch of ref.replace(/[^A-Z]/g, '')) n = n * 26 + ch.charCodeAt(0) - 64; return n - 1; };
+async function parseXlsxLite(buf) {
+  if (typeof DecompressionStream === 'undefined') throw new Error('lib');
+  const rd = await unzip(buf), wb = xmlDoc(await rd('xl/workbook.xml')), rels = xmlDoc(await rd('xl/_rels/workbook.xml.rels')), relMap = {};
+  [...rels.getElementsByTagName('Relationship')].forEach(r => relMap[r.getAttribute('Id')] = r.getAttribute('Target'));
+  const ss = []; const sst = await rd('xl/sharedStrings.xml');
+  if (sst) [...xmlDoc(sst).getElementsByTagName('si')].forEach(si => ss.push([...si.getElementsByTagName('t')].map(t => t.textContent).join('')));
+  const out = [];
+  for (const sh of [...wb.getElementsByTagName('sheet')]) {
+    const rid = sh.getAttribute('r:id') || sh.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+    let tg = relMap[rid] || ''; tg = tg.startsWith('/') ? tg.slice(1) : 'xl/' + tg;
+    const x = await rd(tg); if (!x) continue; const aoa = [];
+    [...xmlDoc(x).getElementsByTagName('row')].forEach(row => {
+      const r = (+row.getAttribute('r') || aoa.length + 1) - 1, arr = []; 
+      [...row.getElementsByTagName('c')].forEach(c => {
+        const ci = colIdx(c.getAttribute('r') || ''), t = c.getAttribute('t'), v = c.getElementsByTagName('v')[0];
+        let val = '';
+        if (t === 'inlineStr') val = [...c.getElementsByTagName('t')].map(z => z.textContent).join('');
+        else if (v) val = t === 's' ? (ss[+v.textContent] ?? '') : (t === 'str' || t === 'e' || t === 'b') ? v.textContent : (isNaN(+v.textContent) ? v.textContent : +v.textContent);
+        arr[ci] = val;
+      });
+      for (let k = 0; k < arr.length; k++) if (arr[k] === undefined) arr[k] = '';
+      while (aoa.length < r) aoa.push([]); aoa[r] = arr;
+    });
+    out.push({ name: sh.getAttribute('name'), aoa });
+  }
+  return out;
+}
+async function parseDocxLite(buf) {
+  if (typeof DecompressionStream === 'undefined') throw new Error('lib');
+  const rd = await unzip(buf), x = await rd('word/document.xml'); if (!x) throw new Error('Fichier Word illisible.');
+  const doc = xmlDoc(x), body = doc.getElementsByTagName('w:body')[0] || doc.documentElement, out = [];
+  const ptxt = p => [...p.getElementsByTagName('*')].map(n => n.localName === 't' ? n.textContent : (n.localName === 'tab' || n.localName === 'br') ? ' ' : '').join('');
+  const cellText = tc => kids(tc, 'p').map(ptxt).join('\n').trim();
+  kids(body, 'tbl').forEach((tb, i) => {
+    const aoa = kids(tb, 'tr').map(tr => kids(tr, 'tc').map(cellText));
+    if (aoa.length) out.push({ name: 'Tableau ' + (i + 1), aoa });
+  });
+  if (!out.length) out.push({ name: 'Texte', aoa: kids(body, 'p').map(ptxt).map(t => t.trim()).filter(Boolean).map(l => l.split(/\t| {2,}|;/).map(z => z.trim())) });
+  return out;
+}
+async function parsePdf(buf) {
+  await loadLib('pdf'); pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdf.worker.min.js';
+  const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise, lines = [];
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const tc = await (await pdf.getPage(p)).getTextContent();
+    const items = tc.items.filter(i => i.str && i.str.trim()).map(i => ({ s: i.str.trim(), x: i.transform[4], y: Math.round(i.transform[5]), w: i.width })).sort((a, b) => b.y - a.y || a.x - b.x), rows = [];
+    items.forEach(it => { const r = rows.find(r => Math.abs(r.y - it.y) <= 3); if (r) r.items.push(it); else rows.push({ y: it.y, items: [it] }); });
+    rows.forEach(r => { r.items.sort((a, b) => a.x - b.x); const ch = []; r.items.forEach(it => { const l = ch[ch.length - 1]; if (l && it.x - (l.x + l.w) < 5) { l.s += ' ' + it.s; l.w = it.x + it.w - l.x; } else ch.push({ ...it }); }); lines.push(ch); });
+  }
+  if (!lines.length) throw new Error('Ce PDF ne contient pas de texte lisible (document scanné). Utilisez un PDF créé depuis Word ou Excel, ou un fichier Excel.');
+  const keys = AKEYS.concat(['prevu']); let hdr = null;
+  for (const ch of lines) if (Object.keys(autoMap(ch.map(c => c.s), keys)).length >= 3) { hdr = ch; break; }
+  if (!hdr) return [{ name: 'PDF', aoa: lines.map(ch => ch.map(c => c.s)) }];
+  const xs = hdr.map(c => c.x), aoa = [hdr.map(c => c.s)];
+  lines.forEach(ch => {
+    if (ch === hdr || Object.keys(autoMap(ch.map(c => c.s), keys)).length >= 3) return;
+    const row = new Array(xs.length).fill('');
+    ch.forEach(c => { let ci = 0; xs.forEach((x, i) => { if (c.x >= x - 6) ci = i; }); row[ci] = (row[ci] ? row[ci] + ' ' : '') + c.s; });
+    aoa.push(row);
+  });
+  return [{ name: 'PDF', aoa }];
+}
+async function parseFile(file) {
+  const ext = (file.name.split('.').pop() || '').toLowerCase(), buf = await file.arrayBuffer();
+  if (['xlsx', 'xlsm'].includes(ext)) { try { return await parseXlsxLite(buf); } catch (e) { if (e.message !== 'lib' && !/DecompressionStream/.test(String(e))) throw e; } }
+  if (ext === 'docx') { try { return await parseDocxLite(buf); } catch (e) { if (e.message !== 'lib') throw e; } }
+  if (['xlsx', 'xls', 'xlsm', 'ods'].includes(ext)) { await loadLib('xlsx'); const wb = XLSX.read(buf, { type: 'array' }); return wb.SheetNames.map(n => ({ name: n, aoa: XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: '' }) })); }
+  if (ext === 'csv' || ext === 'txt') { let t; try { t = new TextDecoder('utf-8', { fatal: true }).decode(buf); } catch (e) { t = new TextDecoder('windows-1252').decode(buf); } return [{ name: file.name, aoa: parseCSV(t) }]; }
+  if (ext === 'docx') { await loadLib('mammoth'); return htmlTables((await mammoth.convertToHtml({ arrayBuffer: buf })).value); }
+  if (ext === 'pdf') return parsePdf(buf);
+  if (ext === 'doc') throw new Error('Ancien format Word (.doc) non pris en charge. Ouvrez-le dans Word et enregistrez-le en .docx.');
+  throw new Error('Format non pris en charge. Utilisez Excel, Word (.docx), PDF ou CSV.');
+}
+const GRADE_RX = /(ATA\s?\.?\s?[12]|AGA\s?\.?\s?[12]|HUISSIER)/i;
+const ntoks = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(new RegExp(GRADE_RX.source, 'gi'), ' ').replace(/[^A-Z ]/g, ' ').split(/\s+/).filter(Boolean);
+function misUnits() {
+  const u = []; DB.org.divisions.forEach(d => { if (d.kind === 'sec') u.push({ div: d.name, bur: '' }); else d.bureaux.forEach(b => u.push({ div: d.name, bur: b.name })); });
+  return u.sort((a, b) => (a.bur === '') - (b.bur === ''));
+}
+function buildMise() {
+  const units = misUnits(), isHead = r => r.some(c => /division|secretariat|pool|exam|stat\.|^\s*c\.?\s?[db]\b/i.test(String(c || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+  const t = imp.tables.find(x => (x.aoa[0] || []).length === units.length && x.aoa.length > 5);
+  if (!t) return null;
+  let st = 0; while (st < 8 && st < t.aoa.length && isHead(t.aoa[st])) st++;
+  const idx = new Map(); DB.agents.forEach(a => { const k = ntoks(a.nom + ' ' + a.postnom + ' ' + a.prenom).sort().join(' '); if (!idx.has(k)) idx.set(k, []); idx.get(k).push(a); });
+  const used = new Set(), items = [];
+  t.aoa.slice(st).forEach(r => r.forEach((cell, ci) => {
+    const txt = String(cell || '').replace(/\s+/g, ' ').trim(); if (!txt || !units[ci]) return;
+    const tk = ntoks(txt); if (tk.length < 1) return;
+    let ag = (idx.get([...tk].sort().join(' ')) || []).find(a => !used.has(a.id));
+    if (!ag) { const ts = new Set(tk), c = DB.agents.filter(a => !used.has(a.id) && (() => { const at = ntoks(a.nom + ' ' + a.postnom + ' ' + a.prenom), as = new Set(at), com = at.filter(z => ts.has(z)).length; return com >= 2 && (at.every(z => ts.has(z)) || tk.every(z => as.has(z))); })()); if (c.length === 1) ag = c[0]; }
+    const gm = txt.match(GRADE_RX), fonc = gm ? gm[0].toUpperCase().replace(/[\s.]/g, '') : '';
+    if (ag) used.add(ag.id);
+    items.push({ unit: units[ci], txt, tk, ag, fonc });
+  }));
+  return { items, units };
+}
+function prepMise() {
+  const box = $('#impPreview'); if (!imp.tables.length) { box.innerHTML = ''; return; }
+  const g = imp.grid = buildMise();
+  if (!g) { box.innerHTML = `<div class="warn">${ico('alert', 20)}<span>Aucun tableau de mise en place reconnu (il faut un tableau Word de ${misUnits().length} colonnes : un bureau par colonne). Pour un fichier Excel avec une colonne « Division » et « Bureau », choisissez « Liste déclarative ».</span></div>`; return; }
+  const ok = g.items.filter(i => i.ag), ko = g.items.filter(i => !i.ag);
+  box.innerHTML = `<section class="card"><h3 style="margin-bottom:10px">2. Vérifier avant d’importer</h3>
+    <p><span class="badge ok">${ico('check', 14)} ${ok.length} agent${ok.length > 1 ? 's' : ''} retrouvé${ok.length > 1 ? 's' : ''}</span> <span class="badge ${ko.length ? 'warn' : 'ok'}">${ko.length} non retrouvé${ko.length > 1 ? 's' : ''}</span></p>
+    <p class="sub">Les agents retrouvés sont rangés dans leur division et leur bureau. Importez d’abord la liste déclarative pour que les noms soient connus.</p>
+    <div class="xlwrap" style="max-height:260px;margin-top:12px"><table class="tbl xl"><thead><tr><th class="l">Agent (mise en place)</th><th class="l">Bureau</th><th>État</th></tr></thead><tbody>
+    ${g.items.slice(0, 40).map(i => `<tr style="cursor:default"><td class="l">${esc(i.txt)}</td><td class="l">${esc(i.unit.bur || i.unit.div)}</td><td class="c">${i.ag ? '<span class="badge ok">retrouvé</span>' : '<span class="badge warn">non retrouvé</span>'}</td></tr>`).join('')}</tbody></table></div>
+    ${ko.length ? `<label class="rd sec2" style="display:flex"><input type="checkbox" id="impCreate">Créer aussi les ${ko.length} agents non retrouvés (nom, fonction, bureau)</label>` : ''}
+    <div class="acts sec2"><button class="btn primary" data-act="impapply" ${ok.length || ko.length ? '' : 'disabled'}>${ico('check', 18)}Appliquer la mise en place</button></div></section>`;
+}
+function applyMise() {
+  const g = imp.grid; if (!g) return; const cr = $('#impCreate') && $('#impCreate').checked; let n = 0, c = 0; const dir = DB.directions[0].name;
+  g.items.forEach(i => {
+    if (i.ag) {
+      i.ag.division = i.unit.div; i.ag.bureau = i.unit.bur; i.ag.updated = Date.now();
+      if (i.fonc && !i.ag.fonction) i.ag.fonction = i.fonc; if (i.fonc && !i.ag.grade) i.ag.grade = canonGrade(i.fonc); n++;
+    } else if (cr) {
+      const t = i.txt.replace(new RegExp(GRADE_RX.source, 'gi'), ' ').replace(/[\/]/g, ' ').split(/\s+/).filter(Boolean);
+      DB.agents.push({ id: uid(), photo: '', created: Date.now(), updated: Date.now(), nom: t[0] || '', postnom: t[1] || '', prenom: t.slice(2).join(' '), naissance: '', sexe: '', etat_civil: '', diplome: '', matricule: '', acte: '', engagement: '', grade: canonGrade(i.fonc), fonction: i.fonc, direction: dir, division: i.unit.div, bureau: i.unit.bur, salaire: 'Non', salaire_montant: '', prime: 'Non', prime_montant: '', recense: 'Non', prise_en_charge: '', situation: 'Actif', observation: '' }); c++;
+    }
+  });
+  save(); toast(`Mise en place : ${n} agent(s) rangé(s)${c ? ', ' + c + ' créé(s)' : ''}`); location.hash = '#/mise-en-place'; route();
+}
+function afterParse() {
+  if (!imp) return;
+  if (imp.mode === 'mise') { prepMise(); return; }
+  if (imp.tables.length) { setupTables(); renderPreview(); } else $('#impPreview').innerHTML = '';
+}
+function setupTables() {
+  const keys = imp.mode === 'agents' ? AKEYS : CKEYS;
+  imp.tables.forEach(t => { const p = pickTable(t.aoa, keys); t.hi = p ? p.hi : 0; t.map = p ? p.map : autoMap(t.aoa[0] || [], keys); });
+}
+
+/* ---------- Administration ---------- */
+function pAdmin() {
+  const dr = session.role === 'admin';
+  const it = (r, l, i, d) => `<a class="tile" href="#/${r}"><span class="ic">${ico(i)}</span><div><b>${l}</b><span>${d}</span></div></a>`;
+  const head = `<header class="ph"><div><h2>Administration</h2><p class="sub">${ROLES[session.role] || session.role} · version ${APP_VERSION}</p></div></header>`;
+  const tiles = `<div class="tiles">
+    ${it('importer', 'Importer un fichier', 'upload', 'Excel, Word ou PDF : agents et cadre organique')}
+    ${it('base-de-donnees', 'Base de données', 'db', 'Sauvegarde, copie Cloud et archive')}
+    ${it('compte', 'Mon mot de passe', 'key', 'Modifier mon accès')}</div>`;
+  if (!dr) return head + tiles + '<p class="note">La gestion des utilisateurs, de la structure et des suppressions est réservée à l’Adm1 (DR).</p>';
+  const users = DB.users.map(u => `<li><span><b>${esc(u.username)}</b><em>${ROLES[u.role] || u.role}</em></span><span class="acts"><button class="btn sm" data-act="resetpw" data-id="${u.id}">Nouveau mot de passe</button>${u.id !== session.id ? `<button class="btn sm danger" data-act="deluser" data-id="${u.id}">Supprimer</button>` : ''}</span></li>`).join('');
+  const dirs = DB.directions.map((d, i) => `<div class="dir"><div class="dh"><b>${esc(d.name)}</b><span class="acts"><button class="btn sm" data-act="rendir" data-i="${i}">Renommer</button><button class="btn sm danger" data-act="deldir" data-i="${i}">Supprimer</button></span></div>
+    <ul class="chips">${d.divisions.map((v, j) => `<li><button class="chip" data-act="rendiv" data-i="${i}" data-j="${j}" title="Renommer">${esc(v)}</button><button class="x" data-act="deldiv" data-i="${i}" data-j="${j}" aria-label="Supprimer ${esc(v)}">×</button></li>`).join('') || '<li class="muted" style="border:0">Aucune division</li>'}</ul>
+    <form class="inline" data-f="adddiv" data-i="${i}"><input name="v" placeholder="Nouvelle division" required aria-label="Nouvelle division"><button class="btn">Ajouter</button></form></div>`).join('');
+  return head + tiles + `
+  <section class="card sec2"><h3>Liste déclarative</h3><form class="inline" data-f="year" style="margin-top:10px;max-width:340px"><input name="y" type="number" min="2000" max="2100" value="${DB.meta.annee}" required aria-label="Année"><button class="btn">Enregistrer l’année</button></form></section>
+  <section class="card sec2"><h3>Directions et divisions</h3><p class="sub" style="margin-bottom:12px">Touchez le nom d’une division pour la renommer. Une division qui contient des agents ne peut pas être supprimée.</p>${dirs}
+    <form class="inline" data-f="adddir"><input name="v" placeholder="Nouvelle direction" required aria-label="Nouvelle direction"><button class="btn">Ajouter</button></form></section>
+  <section class="card sec2"><h3>Utilisateurs</h3><ul class="list" style="margin:12px 0 14px">${users}</ul>
+    <form data-f="adduser" class="grid"><label>Identifiant<input name="u" autocapitalize="none" required></label><label>Mot de passe (6 caractères minimum)<input name="p" type="password" minlength="6" required></label>
+    <label>Rôle<select name="r">${['cb', 'cd', 'admin'].map(r => `<option value="${r}">${ROLES[r]}</option>`).join('')}</select></label><div style="align-self:end"><button class="btn primary">Ajouter l’utilisateur</button></div></form></section>
+  <section class="card sec2"><h3>Zone sensible</h3><p class="sub" style="margin:8px 0 12px">Efface tous les agents de cet appareil. Pensez à sauvegarder sur la page <a href="#/base-de-donnees">Base de données</a> avant.</p><button class="btn danger" data-act="wipe">Supprimer tous les agents</button></section>`;
+}
+
+/* ================= Routage ================= */
+function route() {
+  const h = location.hash.replace(/^#\//, '') || 'accueil', [name, arg] = h.split('/');
+  if (PROTECTED.includes(name) && !session) { nextRoute = h; location.hash = '#/login'; return; }
+  if (name === 'login' && session) { location.hash = '#/accueil'; return; }
+  closeModal();
+  const pages = { accueil: pAccueil, login: pLogin, compte: pCompte, nouveau: () => pForm(arg), importer: () => pImport(arg), admin: pAdmin, 'base-de-donnees': pBaseDeDonnees };
+  DOCS.forEach(d => pages[d] = () => pDoc(d));
+  $('#app').innerHTML = shell((pages[name] || pAccueil)(), pages[name] ? ({ importer: 'admin', 'base-de-donnees': 'admin' }[name] || name) : 'accueil');
+  window.scrollTo(0, 0);
+  if (DOCS.includes(name)) {
+    fillTDiv(); const rd = () => renderDoc(name);
+    ['tq', 'tDiv', 'tSit', 'tSort'].forEach(i => { const e = $('#' + i); if (e) e.addEventListener(i === 'tq' ? 'input' : 'change', rd); });
+    if ($('#tDir')) $('#tDir').addEventListener('change', e => { ui.dir = e.target.value; fillTDiv(); rd(); });
+    rd();
+  }
+  if (name === 'nouveau') {
+    const needBur = () => { $('#fmBur').required = $('#fmBur').options.length > 1; }; needBur();
+    $('#fmDir').addEventListener('change', e => { $('#fmDiv').innerHTML = divOptions(e.target.value, ''); $('#fmBur').innerHTML = bureauOptions('', ''); needBur(); });
+    $('#fmDiv').addEventListener('change', e => { $('#fmBur').innerHTML = bureauOptions(e.target.value, ''); needBur(); });
+    $('#fmGrade').addEventListener('change', e => { const g = GRADES.find(x => x.l === e.target.value); if (g && g.a && !$('#fmFonc').value.trim()) $('#fmFonc').value = g.a; });
+    $('#phIn').addEventListener('change', async e => { const f = e.target.files[0]; if (!f) return; try { formPhoto = await resizeImg(f); $('#phPrev').innerHTML = `<img src="${formPhoto}" alt="">`; } catch (err) { toast('Image illisible. Essayez une autre photo.', true); } });
+  }
+  if (name === 'importer') imp = { tables: [], mode: arg === 'cadre' ? 'cadre' : arg === 'mise' ? 'mise' : 'agents', dir: DB.directions[0].name, sheetAsDiv: false };
+  if (name === 'base-de-donnees') Store.where().then(w => { const e = $('#whereDb'); if (e) e.textContent = w; });
+  if (afterRoute) { const f = afterRoute; afterRoute = null; f(); }
+}
+
+/* ================= Actions ================= */
+const A = {
+  close: () => closeModal(),
+  logout: () => { session = null; try { localStorage.removeItem('dfl_s'); } catch (e) {}; if (location.hash === '#/accueil' || !location.hash) route(); else location.hash = '#/accueil'; },
+  fiche: t => openFiche(t.dataset.id),
+  print: () => { if ($('.mb')) document.body.classList.add('printing'); window.print(); },
+  rmphoto: () => { formPhoto = ''; $('#phPrev').textContent = '+'; $('#phIn').value = ''; },
+  delagent: t => { const a = DB.agents.find(x => x.id === t.dataset.id); if (a && confirm(`Supprimer définitivement la fiche de ${fullName(a)} ?`)) { DB.agents = DB.agents.filter(x => x.id !== a.id); save(); closeModal(); toast('Fiche supprimée'); route(); } },
+  resetpw: async t => { const u = DB.users.find(x => x.id === t.dataset.id); if (!u) return; const p = await ask(`Nouveau mot de passe pour ${u.username} (6 caractères minimum) :`, '', 'password'); if (p == null) return; if (p.length < 6) return toast('Mot de passe trop court', true); u.pass = await sha256(p); u.mustChange = false; save(); toast('Mot de passe modifié'); },
+  deluser: t => { const u = DB.users.find(x => x.id === t.dataset.id); if (!u) return; if (u.role === 'admin' && DB.users.filter(x => x.role === 'admin').length < 2) return toast('Il faut garder au moins un administrateur', true); if (confirm(`Supprimer l’utilisateur ${u.username} ?`)) { DB.users = DB.users.filter(x => x.id !== u.id); save(); route(); } },
+  rendir: async t => {
+    const d = DB.directions[+t.dataset.i], n = ((await ask('Nouveau nom de la direction :', d.name)) || '').trim(); if (!n || n === d.name) return;
+    if (DB.directions.some(x => x.name === n)) return toast('Ce nom existe déjà', true);
+    DB.agents.forEach(a => { if (a.direction === d.name) a.direction = n; }); DB.cadre.forEach(c => { if (c.direction === d.name) c.direction = n; }); d.name = n; save(); route();
+  },
+  deldir: t => { const d = DB.directions[+t.dataset.i]; if (DB.agents.some(a => a.direction === d.name)) return toast('Cette direction contient encore des agents', true); if (DB.directions.length < 2) return toast('Il faut garder au moins une direction', true); if (confirm(`Supprimer la direction « ${d.name} » ?`)) { DB.cadre = DB.cadre.filter(c => c.direction !== d.name); DB.directions.splice(+t.dataset.i, 1); save(); route(); } },
+  rendiv: async t => {
+    const d = DB.directions[+t.dataset.i], old = d.divisions[+t.dataset.j], n = ((await ask('Nouveau nom de la division :', old)) || '').trim(); if (!n || n === old) return;
+    if (d.divisions.includes(n)) return toast('Ce nom existe déjà', true);
+    DB.agents.forEach(a => { if (a.direction === d.name && a.division === old) a.division = n; }); DB.cadre.forEach(c => { if (c.direction === d.name && c.division === old) c.division = n; });
+    d.divisions[+t.dataset.j] = n; save(); route();
+  },
+  deldiv: t => { const d = DB.directions[+t.dataset.i], v = d.divisions[+t.dataset.j]; if (DB.agents.some(a => a.direction === d.name && a.division === v)) return toast('Cette division contient encore des agents', true); if (confirm(`Supprimer la division « ${v} » ?`)) { DB.cadre = DB.cadre.filter(c => !(c.direction === d.name && c.division === v)); d.divisions.splice(+t.dataset.j, 1); save(); route(); } },
+  flushdb: async () => { await Store.flush(); toast('Base de données enregistrée dans le stockage interne'); route(); },
+  cloudbackup: async () => {
+    DB.meta.lastBackup = Date.now(); save();
+    const fname = `cloud_agents_DFL_${today()}.json`;
+    const payload = JSON.stringify(DB);
+    if (navigator.share && navigator.canShare) {
+      try {
+        const file = new File([payload], fname, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ title: 'Sauvegarde Base de Données DFL', text: 'Archive complète des agents (Cloud)', files: [file] });
+          route(); return;
+        }
+      } catch (e) {}
+    }
+    await saveFile(fname, payload, 'application/json');
+    toast('Fichier prêt à être déposé sur Google Drive, OneDrive ou iCloud');
+    route();
+  },
+  copyjson: async () => {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(DB));
+      toast('Base de données copiée dans le presse-papiers');
+    } catch (e) { toast('Copie impossible sur ce navigateur', true); }
+  },
+  backup: async () => { DB.meta.lastBackup = Date.now(); save(); await saveFile(`archive_lieu_sur_DFL_${today()}.json`, JSON.stringify(DB), 'application/json'); toast('Archive téléchargée : placez-la en lieu sûr'); route(); },
+  exportall: () => exportTable('agents_DFL_' + today(), ['Nom', 'Postnom', 'Prénom', 'Date de naissance', 'Sexe', 'État civil', 'Diplôme', 'Matricule', 'N° acte d’engagement', 'Date d’engagement', 'Grade', 'Fonction', 'Direction', 'Division', 'Bureau', 'Salaire', 'Prime', 'Prise en charge', 'Situation'],
+    DB.agents.map(a => [a.nom, a.postnom, a.prenom, fmtDate(a.naissance), SEX[a.sexe] || '', a.etat_civil, a.diplome, a.matricule, a.acte, fmtDate(a.engagement), a.grade, a.fonction, a.direction, a.division, a.bureau, a.salaire, a.prime, a.prise_en_charge, a.situation])),
+  exp: t => { const k = t.dataset.k, r = docRows(k); exportTable({ 'mise-en-place': 'mise_en_place', cadre: 'cadre_organique', liste: 'liste_declarative_' + DB.meta.annee }[k] + '_DFL_' + today(), r.header, r.rows); },
+  template: () => exportTable('modele_agents_DFL', ['Matricule', 'Nom', 'Postnom', 'Prénom', 'Sexe', 'Date de naissance', 'État civil', 'Diplôme', 'N° acte d’engagement', 'Date d’engagement', 'Grade', 'Fonction', 'Direction', 'Division', 'Bureau', 'Salaire', 'Prime', 'Situation'], []),
+  openfolder: () => window.dflDesktop && window.dflDesktop.open(),
+  wipe: async () => { if (!session || session.role !== 'admin') return; if (!DB.agents.length) return toast('Aucun agent à supprimer'); if ((await ask(`Cette action est définitive. Tapez SUPPRIMER pour effacer les ${DB.agents.length} agents :`)) === 'SUPPRIMER') { DB.agents = []; save(); toast('Tous les agents ont été supprimés'); route(); } },
+  enplace: t => { const L = sortAgents(DB.agents.filter(a => a.direction === t.dataset.dir && (a.division || '') === t.dataset.div && norm(a.grade || 'Grade non renseigné') === norm(t.dataset.grade)), 'hier'); openModal(`<h3 style="margin-bottom:12px">${esc(t.dataset.grade)}</h3><p class="sub" style="margin-bottom:12px">${esc(t.dataset.div || 'Sans division')} — ${L.length} agent${L.length > 1 ? 's' : ''}</p><div class="alist">${L.map(agentRow).join('')}</div><div class="acts" style="margin-top:14px"><button class="btn" data-act="close">Fermer</button></div>`); },
+  cadrerm: t => { DB.cadre = DB.cadre.filter(c => c.id !== t.dataset.id); save(); renderCadre(); },
+  impapply: () => {
+    if (imp.mode === 'mise') return applyMise();
+    const res = buildImport(); let nw = 0, up = 0;
+    const dirOf = n => { let d = DB.directions.find(x => norm(x.name) === norm(n || imp.dir)); if (!d) { d = { name: n || imp.dir, divisions: [] }; DB.directions.push(d); } return d; };
+    if (imp.mode === 'agents') {
+      res.items.forEach(c => {
+        const d = dirOf(c.direction); c.direction = d.name; if (c.division) { c.division = matchDivision(c.division, d.divisions); if (!d.divisions.includes(c.division)) d.divisions.push(c.division); }
+        const ex = DB.agents.find(a => agentKey(a) === agentKey(c));
+        if (ex) { for (const k in c) if (c[k]) ex[k] = c[k]; ex.updated = Date.now(); up++; } else { DB.agents.push({ id: uid(), photo: '', created: Date.now(), updated: Date.now(), ...c, situation: c.situation || 'Actif' }); nw++; }
+      });
+      save(); toast(`Import terminé : ${nw} ajouté(s), ${up} mis à jour`); afterRoute = null; location.hash = '#/liste'; route();
+    } else {
+      res.items.forEach(c => {
+        const d = dirOf(c.direction); c.direction = d.name; if (c.division) { c.division = matchDivision(c.division, d.divisions); if (!d.divisions.includes(c.division)) d.divisions.push(c.division); }
+        const ex = DB.cadre.find(x => x.direction === c.direction && x.division === c.division && norm(x.grade) === norm(c.grade));
+        if (ex) { ex.prevu = c.prevu; if (c.note) ex.note = c.note; up++; } else { DB.cadre.push({ id: uid(), ...c }); nw++; }
+      });
+      save(); toast(`Cadre organique : ${nw} poste(s) ajouté(s), ${up} mis à jour`); location.hash = '#/cadre'; route();
+    }
+  }
+};
+
+/* ================= Formulaires ================= */
+const F = {
+  async login(f) {
+    const u = f.u.value.trim().toLowerCase(), user = DB.users.find(x => x.username.toLowerCase() === u);
+    if (!user) return toast('Identifiant ou mot de passe incorrect', true);
+    const p = f.p.value, ok = user.pass.length === 64 ? user.pass === await sha256(p) : user.pass === hash(p);
+    if (!ok) return toast('Identifiant ou mot de passe incorrect', true);
+    if (user.pass.length !== 64) { user.pass = await sha256(p); save(); }
+    session = { id: user.id, username: user.username, role: user.role, mustChange: !!user.mustChange };
+    try { localStorage.setItem('dfl_s', JSON.stringify(session)); } catch (e) {}
+    const n = user.mustChange ? 'compte' : (nextRoute || 'accueil'); nextRoute = ''; location.hash = '#/' + n; route();
+  },
+  async pw(f) {
+    const user = DB.users.find(x => x.id === session.id);
+    const oldOK = user.pass.length === 64 ? user.pass === await sha256(f.old.value) : user.pass === hash(f.old.value);
+    if (!oldOK) return toast('Le mot de passe actuel est incorrect', true);
+    if (f.n1.value !== f.n2.value) return toast('Les deux nouveaux mots de passe sont différents', true);
+    if (f.n1.value.length < 6 || ['admin', user.username.toLowerCase()].includes(f.n1.value.toLowerCase())) return toast('Choisissez un mot de passe d’au moins 6 caractères, différent de votre identifiant', true);
+    user.pass = await sha256(f.n1.value); user.mustChange = false; session.mustChange = false;
+    try { localStorage.setItem('dfl_s', JSON.stringify(session)); } catch (e) {}
+    save(); toast('Mot de passe modifié'); location.hash = '#/accueil'; route();
+  },
+  async adduser(f) { const u = f.u.value.trim(); if (DB.users.some(x => x.username.toLowerCase() === u.toLowerCase())) return toast('Cet identifiant existe déjà', true); DB.users.push({ id: uid(), username: u, pass: await sha256(f.p.value), role: f.r.value, mustChange: false }); save(); toast('Utilisateur ajouté'); route(); },
+  adddir(f) { const v = f.v.value.trim(); if (DB.directions.some(d => d.name === v)) return toast('Cette direction existe déjà', true); DB.directions.push({ name: v, divisions: [] }); save(); route(); },
+  adddiv(f) { const d = DB.directions[+f.dataset.i], v = f.v.value.trim(); if (d.divisions.includes(v)) return toast('Cette division existe déjà', true); d.divisions.push(v); save(); route(); },
+  year(f) { DB.meta.annee = parseInt(f.y.value, 10) || DB.meta.annee; save(); toast('Année enregistrée'); },
+  addpost(f) {
+    const dir = f.dataset.dir, div = f.dataset.div || '', g = canonGrade(f.g.value.trim()), p = Math.max(0, parseInt(f.p.value, 10) || 0), ex = DB.cadre.find(c => c.direction === dir && c.division === div && norm(c.grade) === norm(g));
+    if (ex) ex.prevu = p; else DB.cadre.push({ id: uid(), direction: dir, division: div, grade: g, prevu: p, note: '' });
+    save(); renderCadre();
+  },
+  agent(f) {
+    const g = n => (f.elements[n] ? f.elements[n].value : '').trim(), id = f.dataset.id, o = {};
+    ['nom', 'postnom', 'prenom', 'naissance', 'etat_civil', 'diplome', 'matricule', 'acte', 'engagement', 'grade', 'fonction', 'direction', 'division', 'bureau', 'prise_en_charge', 'situation', 'salaire_montant', 'prime_montant', 'observation'].forEach(k => o[k] = g(k));
+    ['sexe', 'salaire', 'prime', 'recense'].forEach(k => o[k] = (f.querySelector(`input[name=${k}]:checked`) || {}).value || ''); o.photo = formPhoto;
+    const dup = isMat(o.matricule) && DB.agents.find(a => a.matricule && a.id !== id && a.matricule.toLowerCase() === o.matricule.toLowerCase());
+    if (dup) return toast(`Ce matricule existe déjà : ${fullName(dup)}`, true);
+    let a;
+    if (id) { a = DB.agents.find(x => x.id === id); Object.assign(a, o, { updated: Date.now() }); } else { a = { id: uid(), created: Date.now(), updated: Date.now(), ...o }; DB.agents.push(a); }
+    const dv = o.division; if (dv) { const d = DB.directions.find(x => x.name === o.direction); if (d && !d.divisions.includes(dv)) d.divisions.push(dv); }
+    if (o.division && o.bureau && DB.org) {
+      const od = DB.org.divisions.find(x => x.name === o.division);
+      if (od && !od.bureaux.some(b => b.name === o.bureau)) od.bureaux.push({ id: uid(), name: o.bureau, cb: '' });
+    }
+    syncOrgToDirections();
+    save();
+    if (id) { toast('Fiche modifiée'); location.hash = '#/liste'; return; }
+    const rank = sortAgents(DB.agents.filter(x => x.direction === a.direction), 'hier').findIndex(x => x.id === a.id) + 1;
+    afterRoute = () => openModal(`<div class="okhead"><span class="ic">${ico('check', 24)}</span><div><h3>Agent enregistré</h3><span class="muted" style="font-size:13px">${esc(fullName(a))}</span></div></div>
+      <p class="sub" style="margin-bottom:10px">Ses informations ont été placées automatiquement dans les 3 documents :</p><div class="placed">
+      <a href="#/mise-en-place" data-act="close">${ico('layers', 20)}<span><b>Mise en place</b>${esc(a.division || 'Sans division')}</span></a>
+      <a href="#/cadre" data-act="close">${ico('org', 20)}<span><b>Cadre organique</b>${esc(a.grade || 'Grade non renseigné')}</span></a>
+      <a href="#/liste" data-act="close">${ico('list', 20)}<span><b>Liste déclarative</b>N° ${rank} sur ${DB.agents.filter(x => x.direction === a.direction).length}</span></a></div>
+      <div class="acts"><a class="btn primary" href="#/nouveau" data-act="close">Ajouter un autre agent</a><button class="btn" data-act="close">Fermer</button></div>`);
+    location.hash = '#/liste';
+  }
+};
+
+document.addEventListener('click', e => { const t = e.target.closest('[data-act]'); if (!t) return; const fn = A[t.dataset.act]; if (fn) fn(t, e); });
+document.addEventListener('submit', e => { const f = e.target; if (!f.dataset || !F[f.dataset.f]) return; e.preventDefault(); F[f.dataset.f](f); });
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.matches('input[data-prevu]')) {
+    const v = Math.max(0, parseInt(t.value, 10) || 0), dir = t.dataset.dir, div = t.dataset.div, g = t.dataset.grade;
+    const ex = DB.cadre.find(c => c.direction === dir && c.division === div && norm(canonGrade(c.grade)) === norm(g));
+    if (ex) ex.prevu = v; else DB.cadre.push({ id: uid(), direction: dir, division: div, grade: g, prevu: v, note: '' });
+    save(); renderCadre(); return;
+  }
+  if (t.matches('input[data-uprevu]')) {
+    const v = Math.max(0, parseInt(t.value, 10) || 0), dv = DB.org.divisions[+t.dataset.i];
+    if (t.dataset.j === '') dv.prevu = v; else dv.bureaux[+t.dataset.j].prevu = v;
+    save(); renderCadre(); return;
+  }
+  if (t.name === 'impMode' && imp) { imp.mode = t.value; afterParse(); return; }
+  if (t.id === 'impDir' && imp) { imp.dir = t.value; afterParse(); return; }
+  if (t.id === 'impSheet' && imp) { imp.sheetAsDiv = t.checked; afterParse(); return; }
+  if (t.dataset && t.dataset.imp && imp && imp.mode !== 'mise') {
+    const [ti, k] = t.dataset.imp.split('|'), tb = imp.tables[+ti], keys = imp.mode === 'agents' ? AKEYS : CKEYS;
+    if (k === 'hi') { tb.hi = Math.max(0, (parseInt(t.value, 10) || 1) - 1); tb.map = autoMap(tb.aoa[tb.hi] || [], keys); } else if (t.value === '') delete tb.map[k]; else tb.map[k] = +t.value;
+    renderPreview(); const d = $$('#impPreview details')[+ti]; if (d) d.open = true; return;
+  }
+  const file = t.files && t.files[0]; if (!file) return;
+  if (t.id === 'impFile' && imp) {
+    $('#impPreview').innerHTML = '<div class="card"><p>Lecture du fichier…</p></div>';
+    try {
+      imp.tables = (await parseFile(file)).filter(x => x.aoa.length); imp.mode = ($('input[name=impMode]:checked') || {}).value || 'agents'; imp.dir = $('#impDir').value; imp.sheetAsDiv = $('#impSheet').checked;
+      if (!imp.tables.length) throw new Error('Le fichier est vide.'); afterParse();
+    } catch (err) {
+      imp.tables = []; $('#impPreview').innerHTML = `<div class="warn">${ico('alert', 20)}<span>${esc(err.message === 'lib' ? 'Ce format n’est pas lisible dans cette version. Utilisez un fichier Excel (.xlsx), Word (.docx) ou CSV.' : err.message)}</span></div>`;
+    }
+    t.value = '';
+  }
+  if (t.id === 'impJson') {
+    try {
+      const d = JSON.parse(await file.text());
+      if (!d || !Array.isArray(d.agents) || !Array.isArray(d.users) || !Array.isArray(d.directions)) throw 0;
+      if (!confirm(`Remplacer toutes les données actuelles par cette sauvegarde (${d.agents.length} agents) ?`)) return;
+      DB = migrate(d); save();
+      const me = DB.users.find(u => u.id === session.id) || DB.users.find(u => u.username === session.username);
+      if (me) session = { id: me.id, username: me.username, role: me.role, mustChange: !!me.mustChange }; else { session = null; location.hash = '#/login'; }
+      toast('Sauvegarde restaurée'); route();
+    } catch (err) { toast('Ce fichier n’est pas une sauvegarde valide', true); }
+    t.value = '';
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+window.addEventListener('afterprint', () => document.body.classList.remove('printing'));
+window.addEventListener('hashchange', route);
+document.addEventListener('visibilitychange', () => { if (document.hidden) Store.flush(); });
+window.addEventListener('pagehide', () => Store.flush());
+
+/* Déconnexion automatique après 15 minutes d'inactivité */
+let idle; const IDLE = 15 * 60 * 1000;
+const bump = () => { clearTimeout(idle); if (session) idle = setTimeout(() => { if (session) { A.logout(); toast('Session fermée après 15 minutes d’inactivité'); } }, IDLE); };
+['click', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, bump, { passive: true }));
+
+/* ================= Démarrage ================= */
+(async () => {
+  await Store.open();
+  let d = await Store.get();
+  DB = (d && Array.isArray(d.agents)) ? migrate(d) : seed();
+  if ((Store.kind === 'native' || Store.kind === 'desktop') && DB.meta.lastAuto !== today()) { try { await Store.writeRaw(AUXFILE, JSON.stringify(DB)); DB.meta.lastAuto = today(); } catch (e) {} save(); }
+  save();
+  try { const s = localStorage.getItem('dfl_s'); if (s) { const x = JSON.parse(s); if (DB.users.some(u => u.id === x.id)) session = x; } } catch (e) {}
+  route(); bump();
+})();
+})();
+</script>
+</body>
+</html>

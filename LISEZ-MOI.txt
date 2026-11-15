@@ -1,0 +1,27 @@
+DFL - GESTION DES AGENTS : CREER LE SETUP WINDOWS
+=================================================
+
+A) Obtenir le fichier Setup (une seule fois, sur un ordinateur connecté à Internet)
+ 1. Connectez-vous sur github.com et créez un nouveau dépôt (bouton "New"), nom : dfl-windows.
+ 2. Dans le dépôt : "Add file" > "Upload files". Glissez TOUT le contenu de ce dossier
+    (main.js, preload.js, package.json, dossiers www, build, scripts, .github, .gitignore).
+    Si le dossier ".github" n'est pas pris : "Add file" > "Create new file", écrivez comme nom
+    .github/workflows/windows-setup.yml et collez-y le contenu du fichier du même nom. Puis "Commit".
+ 3. Onglet "Actions" > "Windows Setup" > "Run workflow". Attendez environ 5 minutes (coche verte).
+ 4. Ouvrez l'exécution terminée > en bas "Artifacts" > téléchargez "DFL-Setup" (fichier .zip).
+ 5. Décompressez : vous obtenez DFL-Setup-2.7.1.exe. C'est votre setup.
+
+B) Installer sur chaque ordinateur
+ 1. Copiez DFL-Setup-2.7.1.exe sur une clé USB et lancez-le sur chaque ordinateur.
+ 2. Si Windows affiche "Windows a protégé votre ordinateur" : cliquez "Informations complémentaires"
+    puis "Exécuter quand même" (le setup n'est pas signé numériquement).
+ 3. Suivez l'assistant. Un raccourci "DFL Gestion des agents" apparaît sur le Bureau. Aucune connexion Internet nécessaire.
+
+C) Connexion
+ Identifiants initiaux : Adm1 / adm1, Adm2 / adm2, Adm3 / adm3 (changement du mot de passe demandé à la première connexion).
+
+D) Données
+ - Chaque ordinateur a sa propre base : C:\Users\<nom>\AppData\Roaming\DFL Gestion des agents\dfl\base_agents.json
+   (bouton "Ouvrir le dossier local" dans Administration > Base de données).
+ - Pour transférer ou sauvegarder : Administration > Base de données > Sauvegarder, puis "Restaurer" sur l'autre ordinateur.
+ - Mise à jour : relancez le nouveau setup par-dessus l'ancien, les données sont conservées.

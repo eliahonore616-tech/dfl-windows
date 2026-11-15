@@ -1,0 +1,37 @@
+{
+  "name": "dfl-gestion-agents",
+  "version": "2.7.1",
+  "description": "Gestion des agents - Direction de Suivi des Finances Locales",
+  "main": "main.js",
+  "author": "Direction de Suivi des Finances Locales",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "prepare-assets": "node scripts/prepare.js",
+    "dist": "npm run prepare-assets && electron-builder --win nsis --x64 --publish never"
+  },
+  "build": {
+    "appId": "cd.dfl.gestionagents",
+    "productName": "DFL Gestion des agents",
+    "files": ["main.js", "preload.js", "www/**/*", "build/icon.png"],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.png" },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DFL Gestion des agents",
+      "language": "1036"
+    },
+    "artifactName": "DFL-Setup-${version}.${ext}"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "@fontsource-variable/montserrat": "^5.1.0",
+    "xlsx": "0.18.5",
+    "mammoth": "^1.8.0",
+    "pdfjs-dist": "3.11.174"
+  }
+}
