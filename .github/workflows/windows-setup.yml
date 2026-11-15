@@ -1,1 +1,24 @@
+name: Windows Setup
 
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Installer les dépendances
+        run: npm install
+      - name: Construire le Setup Windows
+        run: npm run dist
+      - name: Publier le Setup
+        uses: actions/upload-artifact@v4
+        with:
+          name: DFL-Setup
+          path: dist/DFL-Setup-*.exe
