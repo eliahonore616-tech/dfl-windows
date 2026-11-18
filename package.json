@@ -1,6 +1,6 @@
 {
   "name": "dfl-gestion-agents",
-  "version": "2.7.1",
+  "version": "3.7.0",
   "description": "Gestion des agents - Direction de Suivi des Finances Locales",
   "main": "main.js",
   "author": "Direction de Suivi des Finances Locales",
@@ -17,9 +17,10 @@
       "main.js",
       "preload.js",
       "index.html",
-      "icon.png",
       "fonts/**/*",
-      "lib/**/*"
+      "lib/**/*",
+      "icon.png",
+      "icon.ico"
     ],
     "win": {
       "target": [
@@ -31,7 +32,7 @@
           ]
         }
       ],
-      "icon": "icon.png"
+      "icon": "icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -40,7 +41,10 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "DFL Gestion des agents",
-      "language": "1036"
+      "language": "1036",
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico"
     },
     "artifactName": "DFL-Setup-${version}.${ext}"
   },

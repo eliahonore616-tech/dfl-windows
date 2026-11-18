@@ -12,7 +12,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280, height: 860, minWidth: 900, minHeight: 600,
     backgroundColor: '#EEF4FF', title: 'DFL – Gestion des agents',
-    icon: path.join(__dirname, 'icon.png'),
+    icon: path.join(__dirname, process.platform === 'win32' ? 'icon.ico' : 'icon.png'),
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   Menu.setApplicationMenu(null);
