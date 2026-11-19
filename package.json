@@ -1,14 +1,14 @@
 {
   "name": "dfl-gestion-agents",
-  "version": "3.7.0",
+  "version": "3.9.0",
   "description": "Gestion des agents - Direction de Suivi des Finances Locales",
   "main": "main.js",
-  "author": "Direction de Suivi des Finances Locales",
+  "author": "Elia Kilu Honore",
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
     "prepare-assets": "node prepare.js",
-    "dist": "npm run prepare-assets && electron-builder --win nsis --x64 --ia32 --publish never"
+    "dist": "npm run prepare-assets && node protect.js index.html && electron-builder --win nsis --x64 --ia32 --publish never"
   },
   "build": {
     "appId": "cd.dfl.gestionagents",
@@ -20,7 +20,8 @@
       "fonts/**/*",
       "lib/**/*",
       "icon.png",
-      "icon.ico"
+      "icon.ico",
+      "LICENSE.txt"
     ],
     "win": {
       "target": [
@@ -54,6 +55,7 @@
     "@fontsource-variable/montserrat": "^5.1.0",
     "xlsx": "0.18.5",
     "mammoth": "^1.8.0",
-    "pdfjs-dist": "3.11.174"
+    "pdfjs-dist": "3.11.174",
+    "javascript-obfuscator": "4.1.1"
   }
 }

@@ -1,3 +1,8 @@
+/*
+ * Gestion des agents DSFL — Copyright © 2026 Elia Kilu Honore. Tous droits réservés.
+ * Logiciel propriétaire : copie, modification, diffusion et décompilation interdites
+ * sans autorisation écrite de l'auteur. Voir LICENSE.txt.
+ */
 /* Copie la police Montserrat et les modules de lecture/export (Excel, Word, PDF) dans www/ */
 const fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..'), nm = path.join(root, 'node_modules'), www = root;

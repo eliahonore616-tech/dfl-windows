@@ -1,4 +1,9 @@
-const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
+/*
+ * Gestion des agents DSFL — Copyright © 2026 Elia Kilu Honore. Tous droits réservés.
+ * Logiciel propriétaire : copie, modification, diffusion et décompilation interdites
+ * sans autorisation écrite de l'auteur. Voir LICENSE.txt.
+ */
+const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -16,6 +21,7 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   });
   Menu.setApplicationMenu(null);
+  win.webContents.setWindowOpenHandler(({ url }) => { if (/^https:\/\//i.test(url)) shell.openExternal(url); return { action: 'deny' }; });
   win.loadFile(path.join(__dirname, 'index.html'));
   win.on('closed', () => { win = null; });
 }
@@ -29,6 +35,20 @@ ipcMain.handle('dfl:write', async (_e, name, txt) => {
   const f = path.join(dataDir(), safeName(name)), tmp = f + '.tmp';
   await fs.promises.writeFile(tmp, String(txt), 'utf8');
   await fs.promises.rename(tmp, f);
+  return true;
+});
+/* Enregistrer la page affichée en PDF (A4 paysage, numéros de page) */
+ipcMain.handle('dfl:pdf', async (_e, name) => {
+  if (!win) return false;
+  const r = await dialog.showSaveDialog(win, { defaultPath: safeName(name || 'document') + '.pdf', filters: [{ name: 'PDF', extensions: ['pdf'] }] });
+  if (r.canceled || !r.filePath) return false;
+  const buf = await win.webContents.printToPDF({
+    landscape: true, pageSize: 'A4', printBackground: true, displayHeaderFooter: true,
+    headerTemplate: '<span></span>',
+    footerTemplate: '<div style="font-size:9px;width:100%;text-align:center;font-family:Arial,sans-serif;color:#444">Direction de Suivi des Finances Locales — Page <span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+    margins: { marginType: 'custom', top: 0.4, bottom: 0.6, left: 0.4, right: 0.4 }
+  });
+  await fs.promises.writeFile(r.filePath, buf);
   return true;
 });
 ipcMain.handle('dfl:where', () => dataDir());
