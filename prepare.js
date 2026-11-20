@@ -1,5 +1,5 @@
 /*
- * Gestion des agents DSFL — Copyright © 2026 Direction de Suivi des Finances Locales. Tous droits réservés.
+ * Gestion des agents DSFL — Copyright © 2026 DSFL. Tous droits réservés.
  * Logiciel propriétaire : copie, modification, diffusion et décompilation interdites
  * sans autorisation écrite de l'auteur. Voir LICENSE.txt.
  */

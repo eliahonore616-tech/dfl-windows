@@ -1,9 +1,9 @@
 {
   "name": "dfl-gestion-agents",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Gestion des agents - Direction de Suivi des Finances Locales",
   "main": "main.js",
-  "author": "Elia Kilu Honore",
+  "author": "DSFL",
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
